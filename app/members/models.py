@@ -11,15 +11,13 @@ def team_image_path(instance, filename):
     return f'{directory}/{filename}'
 
 
-class Team:
+class TeamManager(models.Manager):
 
-    def SetData(self, name, img):
-        self.name = name
-        self.img = img
+    def create_Team(self,name):
+        team = self.create(name=name)
+        return team
 
-    def __init__(self, name, img):
-        self.SetData(name,img)
-        print('Team이 생성되었습니다.')
-    name = models.CharField(max_length=20,verbose_name='팀 이름')
-    img = models.ImageField(upload_to=team_image_path, blank=True, null=True, verbose_name='메인 포스터')
 
+class Team(models.Model):
+    name = models.CharField(max_length=30)
+    objects = TeamManager()
