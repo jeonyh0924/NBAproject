@@ -8,7 +8,16 @@ ALLOWED_HOSTS = secrets['ALLOWED_HOSTS']
 
 WSGI_APPLICATION = 'config.wsgi.dev.application'
 
-DATABASES = secrets['DATABASES']
+# postgre
+# DATABASES = secrets['DATABASES']
+
+# SQlite3
+DATABASES = {
+     'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+    }
+}
 
 # django -storages
 # ~/.aws/credentials
