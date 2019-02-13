@@ -40,7 +40,9 @@ for url, name in zip (team_img_url, team_name):
         pass
     urllib.request.urlretrieve(url, f'static/{name}/{name}.svg')
 
-for url, team_name in zip(detail_urls, team_name):
+Teams = Team.objects.all()
+
+for index, url in enumerate(detail_urls):
     # 팀별 url 접근
     driver.get(url)
     time.sleep(2)
@@ -55,11 +57,9 @@ for url, team_name in zip(detail_urls, team_name):
         driver.get(url)
         time.sleep(2)
 
-        player_img_url_section = driver.find_elements_by_xpath \
-            ('//*[@id="block-league-content"]/player-detail/section[1]/header/section[1]/img')
+        player_img_url_section = driver.find_elements_by_xpath('//*[@id="block-league-content"]/player-detail/section[1]/header/section[1]/img')
         player_img_src = player_img_url_section[0].get_attribute("src")
-        season_stat_tbody= driver.find_elements_by_xpath \
-            ('//*[@id="block-league-content"]/player-detail/player-snapshot-career/section/table/tbody')
+        season_stat_tbody= driver.find_elements_by_xpath('//*[@id="block-league-content"]/player-detail/player-snapshot-career/section/table/tbody')
         tr_data = season_stat_tbody[0].find_elements_by_tag_name('tr')
         tr_data[0].find_elements_by_tag_name('td')
 
@@ -83,14 +83,16 @@ for url, team_name in zip(detail_urls, team_name):
         player_born = driver.find_element_by_xpath('//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[1]/span[2]').get_attribute('innerText')
         player_hometown = driver.find_element_by_xpath('//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[3]/span[2]').get_attribute('innerText')
         player_nba_debut = driver.find_element_by_xpath('//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[4]/span[2]').get_attribute('innerText')
+        name = player_first_name + player_last_name
 
         try:
             player_path = player_back_number + " " + player_first_name + " " + player_last_name
-            urllib.request.urlretrieve(player_img_src, f'static/{team_name}/{player_path}.png')
+            urllib.request.urlretrieve(player_img_src, f'static/{Teams[index].name}/{player_path}.png')
 
-            player_first_name = Player.objects.create(
+            player_path = Player.objects.create(
                 # MPG 를 pycharm 에서 playin_time으로 작성함
-
+                name=name,
+                team=Teams[index],
                 playin_time=MPG,
                 FGP=FGP,
                 T3PP=T3PP,
@@ -109,6 +111,7 @@ for url, team_name in zip(detail_urls, team_name):
                 player_born=player_born,
                 player_hometown=player_hometown,
                 player_nba_debut=player_nba_debut,
+                player_image=player_img_src,
             )
             print(player_path, " Created ===========")
 

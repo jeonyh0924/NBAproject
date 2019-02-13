@@ -28,9 +28,11 @@ SECRET_KEY = secrets['SECRET_KEY']
 
 
 # Static
-STATICFILES_DIRS = [
-    STATIC_DIR,
-]
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ] 이게 서버 500 의 원인이 되었었다. 이게 왜 일까
+
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 

@@ -24,15 +24,16 @@ class Player(models.Model):
 
     # 선수 스탯
     playin_time = models.CharField(verbose_name='출장 시간', max_length=100)
-    FGP = models.FloatField(verbose_name='야투 성공률', default=0)
-    T3PP = models.FloatField(verbose_name='3점 야투 성공률', default=0)
-    FTP = models.FloatField(verbose_name='자유투 성공률', default=0)
-    PPG = models.FloatField(verbose_name='게임 평균 득점', default=0)
-    RPG = models.FloatField(verbose_name='게임 평균 리바운드', default=0)
-    APG = models.FloatField(verbose_name='게임 평균 어시스트', default=0)
-    BPG = models.FloatField(verbose_name='게임 평균 블락', default=0)
+    FGP = models.CharField(verbose_name='야투 성공률', max_length=50)
+    T3PP = models.CharField(verbose_name='3점 야투 성공률', max_length=50)
+    FTP = models.CharField(verbose_name='자유투 성공률', max_length=50)
+    PPG = models.CharField(verbose_name='게임 평균 득점', max_length=50)
+    RPG = models.CharField(verbose_name='게임 평균 리바운드', max_length=50)
+    APG = models.CharField(verbose_name='게임 평균 어시스트', max_length=50)
+    BPG = models.CharField(verbose_name='게임 평균 블락', max_length=50)
 
     # 선수 프로필
+    name = models.CharField('풀네임', max_length=100)
     player_back_number = models.CharField(verbose_name='선수 등 번호', max_length=100)
     player_position = models.CharField(verbose_name='선수 포지션', max_length=5)
     player_first_name = models.CharField(verbose_name='선수 이름', max_length=50)
