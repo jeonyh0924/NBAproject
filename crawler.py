@@ -29,11 +29,12 @@ for url, name in zip (team_img_url, team_name):
     try:
     # Create target Directory
         os.mkdir(f'static/{dirName}')
-        print("Directory ", dirName,  " Created ")
+
         team = Team.objects.create(
             name=name,
-            team_image=url,
+            team_image=f'{name}/{name}.svg',
         )
+        print("Directory ", dirName, " Created ")
 
     except FileExistsError:
         print("already exists ", dirName)
@@ -111,7 +112,7 @@ for index, url in enumerate(detail_urls):
                 player_born=player_born,
                 player_hometown=player_hometown,
                 player_nba_debut=player_nba_debut,
-                player_image=player_img_src,
+                player_image=f'{Teams[index].name}/{player_path}.png',
             )
             print(player_path, " Created ===========")
 
