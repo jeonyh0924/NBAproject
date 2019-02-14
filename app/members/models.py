@@ -7,17 +7,18 @@ from django.db import models
 class User(AbstractUser):
     pass
 
-
+def team_path(instance, filename):
+    a = f'{instance.name}/{instance.name}.svg'
+    return a
 
 def player_path(instance, filename):
     a = f'{instance.team.name}/{instance.name}.png'
-    print(a)
     return a
 
 
 class Team(models.Model):
     name = models.CharField(verbose_name='팀 이름', max_length=100)
-    team_image = models.ImageField(verbose_name='팀 사진', blank=True, null=True, default=True)
+    team_image = models.ImageField(upload_to=team_path, verbose_name='팀 사진', blank=True, null=True, default=True)
 
     def __str__(self):
         return self.name
@@ -52,7 +53,7 @@ class Player(models.Model):
     player_born = models.CharField(verbose_name='선수 생년월일', max_length=50)
     player_hometown = models.CharField(verbose_name='선수 고향', max_length=50)
     player_nba_debut = models.CharField(verbose_name='데뷔 년도', max_length=50)
-    player_image = models.ImageField(upload_to=player_path,verbose_name='선수 사진', blank=True, null=True, default=True)
+    player_image = models.ImageField(upload_to=player_path, verbose_name='선수 사진', blank=True, null=True, default=True)
 
     def __str__(self):
         return self.name
@@ -90,17 +91,19 @@ class Player(models.Model):
                 # Create target Directory
                 os.mkdir(f'static/{dirName}')
 
+                urllib.request.urlretrieve(url, f'static/{name}/{name}.svg')
+                f = open(os.path.join(settings.BASE_DIR, f'static/{name}/{name}.svg'), 'rb')
+
                 team = Team.objects.create(
                     name=name,
-                    team_image=f'{name}/{name}.svg',
+                    team_image=File(f),
                 )
                 print("Directory ", dirName, " Created ")
+                f.close()
 
             except FileExistsError:
                 print("already exists ", dirName)
                 pass
-            urllib.request.urlretrieve(url, f'static/{name}/{name}.svg')
-            f = open(os.path.join(settings.BASE_DIR, f'static/{Teams[index].name}/{player_path}.png'), 'rb')
 
         Teams = Team.objects.all()
 
@@ -198,7 +201,6 @@ class Player(models.Model):
                     )
                     f.close()
                     print(player_path, " Created ===========")
-                    return False
 
                 except FileExistsError:
                     print("already exists ", player_path)
