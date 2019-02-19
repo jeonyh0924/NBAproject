@@ -7,9 +7,11 @@ from django.db import models
 class User(AbstractUser):
     pass
 
+
 def team_path(instance, filename):
     a = f'{instance.name}/{instance.name}.svg'
     return a
+
 
 def player_path(instance, filename):
     a = f'{instance.team.name}/{instance.name}.png'
@@ -25,8 +27,6 @@ class Team(models.Model):
 
 
 class Player(models.Model):
-
-
     team = models.ForeignKey(
         Team,
         on_delete=models.CASCADE,
@@ -44,16 +44,16 @@ class Player(models.Model):
 
     # 선수 프로필
     name = models.CharField('풀네임', max_length=100)
-    player_back_number = models.CharField(verbose_name='선수 등 번호', max_length=100)
-    player_position = models.CharField(verbose_name='선수 포지션', max_length=5)
-    player_first_name = models.CharField(verbose_name='선수 이름', max_length=50)
-    player_last_name = models.CharField(verbose_name='선수 성씨', max_length=50)
-    player_height = models.CharField(verbose_name='선수 키', max_length=100)
-    player_weight = models.CharField(verbose_name='선수 무게', max_length=100)
-    player_born = models.CharField(verbose_name='선수 생년월일', max_length=50)
-    player_hometown = models.CharField(verbose_name='선수 고향', max_length=50)
-    player_nba_debut = models.CharField(verbose_name='데뷔 년도', max_length=50)
-    player_image = models.ImageField(upload_to=player_path, verbose_name='선수 사진', blank=True, null=True, default=True)
+    back_number = models.CharField(verbose_name='선수 등 번호', max_length=100)
+    position = models.CharField(verbose_name='선수 포지션', max_length=5)
+    first_name = models.CharField(verbose_name='선수 이름', max_length=50)
+    last_name = models.CharField(verbose_name='선수 성씨', max_length=50)
+    height = models.CharField(verbose_name='선수 키', max_length=100)
+    weight = models.CharField(verbose_name='선수 무게', max_length=100)
+    born = models.CharField(verbose_name='선수 생년월일', max_length=50)
+    hometown = models.CharField(verbose_name='선수 고향', max_length=50)
+    nba_debut = models.CharField(verbose_name='데뷔 년도', max_length=50)
+    image = models.ImageField(upload_to=player_path, verbose_name='선수 사진', blank=True, null=True, default=True)
 
     def __str__(self):
         return self.name
@@ -131,6 +131,7 @@ class Player(models.Model):
                 tr_data[0].find_elements_by_tag_name('td')
 
                 player_stats = [url.get_attribute("innerText") for url in tr_data[0].find_elements_by_tag_name('td')]
+                # NamedTuple
                 MPG = player_stats[0]
                 FGP = player_stats[1]
                 T3PP = player_stats[2]
@@ -140,37 +141,37 @@ class Player(models.Model):
                 APG = player_stats[6]
                 BPG = player_stats[7]
 
-                player_back_number = driver.find_element_by_xpath(
+                back_number = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[1]').get_attribute(
                     "innerText")[1:]
-                player_position = driver.find_element_by_xpath(
+                position = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[3]').get_attribute(
                     'innerText')
-                player_first_name = driver.find_element_by_xpath(
+                first_name = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[1]').get_attribute(
                     'innerText')
-                player_last_name = driver.find_element_by_xpath(
+                last_name = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[2]').get_attribute(
                     'innerText')
-                player_height = driver.find_element_by_xpath(
+                height = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[1]/p[3]').get_attribute(
                     'innerText')[2:]
-                player_weight = driver.find_element_by_xpath(
+                weight = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[2]/p[3]').get_attribute(
                     'innerText')[2:]
-                player_born = driver.find_element_by_xpath(
+                born = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[1]/span[2]').get_attribute(
                     'innerText')
-                player_hometown = driver.find_element_by_xpath(
+                hometown = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[3]/span[2]').get_attribute(
                     'innerText')
-                player_nba_debut = driver.find_element_by_xpath(
+                nba_debut = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[4]/span[2]').get_attribute(
                     'innerText')
-                name = player_first_name + player_last_name
+                name = first_name + last_name
 
                 try:
-                    player_path = player_back_number + " " + player_first_name + " " + player_last_name
+                    player_path = back_number + " " + first_name + " " + last_name
                     urllib.request.urlretrieve(player_img_src, f'static/{Teams[index].name}/{player_path}.png')
 
                     f = open(os.path.join(settings.BASE_DIR, f'static/{Teams[index].name}/{player_path}.png'), 'rb')
@@ -188,16 +189,16 @@ class Player(models.Model):
                         APG=APG,
                         BPG=BPG,
 
-                        player_back_number=player_back_number,
-                        player_position=player_position,
-                        player_first_name=player_first_name,
-                        player_last_name=player_last_name,
-                        player_height=player_height,
-                        player_weight=player_weight,
-                        player_born=player_born,
-                        player_hometown=player_hometown,
-                        player_nba_debut=player_nba_debut,
-                        player_image=File(f),
+                        back_number=back_number,
+                        position=position,
+                        first_name=first_name,
+                        last_name=last_name,
+                        height=height,
+                        weight=weight,
+                        born=born,
+                        hometown=hometown,
+                        nba_debut=nba_debut,
+                        image=File(f),
                     )
                     f.close()
                     print(player_path, " Created ===========")
@@ -205,4 +206,3 @@ class Player(models.Model):
                 except FileExistsError:
                     print("already exists ", player_path)
                     pass
-
