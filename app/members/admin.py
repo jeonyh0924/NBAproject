@@ -14,6 +14,6 @@ class TeamAdmin(admin.ModelAdmin):
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team']
-    list_per_page = 40
+    list_per_page = 4
     list_filter = ['team', 'id']
     ordering = ['pk']

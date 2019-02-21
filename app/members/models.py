@@ -35,7 +35,7 @@ class Team(models.Model):
         import urllib.request
         import os
         from members.models import Team
-        from django.core.exceptions import ObjectDoesNotExist
+
 
         driver = webdriver.Chrome('/Users/mac/projects/ChromeWebDriver/chromedriver')
 
@@ -50,10 +50,10 @@ class Team(models.Model):
         team_img_url = [url.get_attribute("src") for url in team_img_urls]
 
         for url, name in zip(team_img_url, team_name):
-            dirName = name
+
             try:
                 # Create target Directory
-                os.mkdir(f'static/{dirName}')
+                os.mkdir(f'static/{name}')
 
                 urllib.request.urlretrieve(url, f'static/{name}/{name}.svg')
                 f = open(os.path.join(settings.BASE_DIR, f'static/{name}/{name}.svg'), 'rb')
@@ -62,15 +62,13 @@ class Team(models.Model):
                     name=name,
                     team_image=File(f),
                 )
-                print("Directory ", dirName, " Created ")
+                print("Directory ", name, " Created ")
                 f.close()
 
             except FileExistsError:
-                print("already exists ", dirName)
+                print("already exists ", name)
 
         driver.close()
-
-
 
 
 class Player(models.Model):
@@ -113,6 +111,7 @@ class Player(models.Model):
         import os
         from members.models import Team, Player
         from django.core.exceptions import ObjectDoesNotExist
+        import collections
 
         driver = webdriver.Chrome('/Users/mac/projects/ChromeWebDriver/chromedriver')
 
@@ -129,9 +128,9 @@ class Player(models.Model):
             Teams = Team.objects.get(pk=1)
             Teams = Team.objects.all()
         except ObjectDoesNotExist:
+            Teams = Team
             Teams.crawler()
             Teams= Team.objects.all()
-
 
         for index, url in enumerate(detail_urls):
             # 팀별 url 접근
@@ -143,6 +142,11 @@ class Player(models.Model):
             player_url_a_tags = [url.find_elements_by_tag_name('a') for url in all_players_urls]
             player_url = [url[0].get_attribute("href") for url in player_url_a_tags]
 
+            variable = collections.namedtuple('variable', ['MPG', 'FGP', 'T3PP', 'FTP', 'PPG', 'RPG', 'APG', 'BPG',
+                                                           'back_number', 'position', 'first_name', 'last_name',
+                                                           'height', 'weight', 'born', 'hometown', 'nba_debut',
+                                                           'name',
+                                                           ])
             # 선수별 url 접근
             for url in player_url:
                 driver.get(url)
@@ -158,72 +162,72 @@ class Player(models.Model):
 
                 player_stats = [url.get_attribute("innerText") for url in tr_data[0].find_elements_by_tag_name('td')]
                 # NamedTuple
-                MPG = player_stats[0]
-                FGP = player_stats[1]
-                T3PP = player_stats[2]
-                FTP = player_stats[3]
-                PPG = player_stats[4]
-                RPG = player_stats[5]
-                APG = player_stats[6]
-                BPG = player_stats[7]
+                variable.MPG = player_stats[0]
+                variable.FGP = player_stats[1]
+                variable.T3PP = player_stats[2]
+                variable.FTP = player_stats[3]
+                variable.PPG = player_stats[4]
+                variable.RPG = player_stats[5]
+                variable.APG = player_stats[6]
+                variable.BPG = player_stats[7]
 
-                back_number = driver.find_element_by_xpath(
+                variable.back_number = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[1]').get_attribute(
                     "innerText")[1:]
-                position = driver.find_element_by_xpath(
+                variable.position = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[3]').get_attribute(
                     'innerText')
-                first_name = driver.find_element_by_xpath(
+                variable.first_name = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[1]').get_attribute(
                     'innerText')
-                last_name = driver.find_element_by_xpath(
+                variable.last_name = driver.find_element_by_xpath(
                     '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[2]').get_attribute(
                     'innerText')
-                height = driver.find_element_by_xpath(
+                variable.height = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[1]/p[3]').get_attribute(
                     'innerText')[2:]
-                weight = driver.find_element_by_xpath(
+                variable.weight = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[2]/p[3]').get_attribute(
                     'innerText')[2:]
-                born = driver.find_element_by_xpath(
+                variable.born = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[1]/span[2]').get_attribute(
                     'innerText')
-                hometown = driver.find_element_by_xpath(
+                variable.hometown = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[3]/span[2]').get_attribute(
                     'innerText')
-                nba_debut = driver.find_element_by_xpath(
+                variable.nba_debut = driver.find_element_by_xpath(
                     '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[4]/span[2]').get_attribute(
                     'innerText')
-                name = first_name + last_name
+                variable.name = variable.first_name + variable.last_name
 
                 try:
-                    player_path = back_number + " " + first_name + " " + last_name
+                    player_path = variable.back_number + " " + variable.first_name + " " + variable.last_name
                     urllib.request.urlretrieve(player_img_src, f'static/{Teams[index].name}/{player_path}.png')
 
                     f = open(os.path.join(settings.BASE_DIR, f'static/{Teams[index].name}/{player_path}.png'), 'rb')
 
                     player_path = Player.objects.create(
                         # MPG 를 pycharm 에서 playin_time으로 작성함
-                        name=name,
+                        name=variable.name,
                         team=Teams[index],
-                        playin_time=MPG,
-                        FGP=FGP,
-                        T3PP=T3PP,
-                        FTP=FTP,
-                        PPG=PPG,
-                        RPG=RPG,
-                        APG=APG,
-                        BPG=BPG,
+                        playin_time=variable.MPG,
+                        FGP=variable.FGP,
+                        T3PP=variable.T3PP,
+                        FTP=variable.FTP,
+                        PPG=variable.PPG,
+                        RPG=variable.RPG,
+                        APG=variable.APG,
+                        BPG=variable.BPG,
 
-                        back_number=back_number,
-                        position=position,
-                        first_name=first_name,
-                        last_name=last_name,
-                        height=height,
-                        weight=weight,
-                        born=born,
-                        hometown=hometown,
-                        nba_debut=nba_debut,
+                        back_number=variable.back_number,
+                        position=variable.position,
+                        first_name=variable.first_name,
+                        last_name=variable.last_name,
+                        height=variable.height,
+                        weight=variable.weight,
+                        born=variable.born,
+                        hometown=variable.hometown,
+                        nba_debut=variable.nba_debut,
                         image=File(f),
                     )
                     f.close()
