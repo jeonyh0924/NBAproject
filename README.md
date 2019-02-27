@@ -48,3 +48,10 @@ https://selenium-python.readthedocs.io/locating-elements.html
 ## NamedTuple 나중에 써서 분리해보기 
 
 크롤링 코드 각 모델별로 분리해서 모델 매니저를 통해서 관리 .
+
+
+## django admin 커스터마이징
+https://www.slideshare.net/bbayoung7849/djangoadminsitecustomexample  박영우 님의 파이콘 한국 2017 발표자료
+
+https://teamlab.github.io/jekyllDecent/blog/tutorials/Django-Admin-%EC%BB%A4%EC%8A%A4%ED%84%B0%EB%A7%88%EC%9D%B4%EC%A7%95
+장고 
