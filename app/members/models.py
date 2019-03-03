@@ -235,3 +235,8 @@ class Player(models.Model):
                 except FileExistsError:
                     print("already exists ", player_path)
                     pass
+
+    def call_by_crawler(player_model, requset, queryset):
+        Player.crawler()
+
+    call_by_crawler.short_description = "선수 버튼 실행"
