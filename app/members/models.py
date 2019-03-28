@@ -2,12 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.files import File
 from django.db import models
-from django.core.exceptions import ObjectDoesNotExist
-
-
-
-class User(AbstractUser):
-    pass
+import datetime
 
 
 def team_path(instance, filename):
@@ -36,7 +31,6 @@ class Team(models.Model):
         import os
         from members.models import Team
 
-
         driver = webdriver.Chrome('/Users/mac/projects/ChromeWebDriver/chromedriver')
 
         driver.implicitly_wait(3)
@@ -61,6 +55,7 @@ class Team(models.Model):
                 team = Team.objects.create(
                     name=name,
                     team_image=File(f),
+
                 )
                 print("Directory ", name, " Created ")
                 f.close()
@@ -130,7 +125,7 @@ class Player(models.Model):
         except ObjectDoesNotExist:
             Teams = Team
             Teams.crawler()
-            Teams= Team.objects.all()
+            Teams = Team.objects.all()
 
         for index, url in enumerate(detail_urls):
             # 팀별 url 접근
@@ -210,6 +205,7 @@ class Player(models.Model):
                         # MPG 를 pycharm 에서 playin_time으로 작성함
                         name=variable.name,
                         team=Teams[index],
+
                         playin_time=variable.MPG,
                         FGP=variable.FGP,
                         T3PP=variable.T3PP,
@@ -240,3 +236,73 @@ class Player(models.Model):
         Player.crawler()
 
     call_by_crawler.short_description = "선수 버튼 실행"
+
+
+class User(AbstractUser):
+    player = models.ManyToManyField(Player, blank=True, null=True)
+
+
+class Post(models.Model):
+    content = models.TextField(verbose_name='작성 글', max_length=500)
+    created_at = models.DateTimeField(verbose_name='생성 날짜')
+    updated_at = models.DateTimeField(verbose_name='수정 날짜')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+
+class Comment(models.Model):
+    content = models.TextField(verbose_name='작성 글', max_length=500)
+    created_at = models.DateTimeField(verbose_name='작성 날')
+    updated_at = models.DateTimeField(verbose_name='수정 날짜')
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+
+class Signature_team(models.Model):
+    user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
+    player = models.ManyToManyField(Player, blank=True, null=True)
+    player_limit = models.BooleanField(default=True)
+
+    def player_add_error(self, pk):
+        if not self.objects.get(pk=pk).player_limit:
+            return f'더 이상은 선수를 추가 할 수 없습니다.'
+
+    def player_limit_control(self, pk):
+        if self.objects.get(pk=pk).player.count() >= 5:
+            self.objects.get(pk=pk).player_limit = False
+            return self.objects.get(pk=pk).player_limit
+    # s_list = []
+    # player_max_count = 5
+    #
+    # def player_count(self, pk, player):
+    #     while self.player_max_count >= 1:
+    #         s = Signature_team.objects.get(pk=pk)
+    #         s.s_list.append(player)
+
+
+class Postlike(models.Model):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        # 특정 유저가 특정 포스트 좋아요를 누른 정보는 유니크 해야 함.
+        unique_together = (
+            ('post', 'user'),
+        )

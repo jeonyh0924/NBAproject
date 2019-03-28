@@ -54,4 +54,21 @@ https://selenium-python.readthedocs.io/locating-elements.html
 https://www.slideshare.net/bbayoung7849/djangoadminsitecustomexample  박영우 님의 파이콘 한국 2017 발표자료
 
 https://teamlab.github.io/jekyllDecent/blog/tutorials/Django-Admin-%EC%BB%A4%EC%8A%A4%ED%84%B0%EB%A7%88%EC%9D%B4%EC%A7%95
-장고 
+장고 어드민 스타일링
+
+## django modeling 정리
+* Foreignkey (on_delete = model.CASECADE)
+>모델 A와 모델 B가 M:1 관계일 때, 모델 A에 on_delete = model.CASECADE가 설정되어 있으면, 모델 B의 어떤 레코드가 삭제되면 삭제될 모델 B의 레코드와 관련된 모델 A의 레코드도 삭제된다. 
+
+>즉 지워질 때, 같이 지워지게 종속관계를 설정하는 것, 
+>선수 모델이 팀 모델에 외래키를 걸고 CASECADE 설정을 하게 되면
+>선수 모델이 제거될 때 팀 모델 또한 삭제된다. 
+
+* Null 과 blank 차이 
+
+> 필드를 비워둘 것인지 허용하는 방법
+> Null = True 필드의 값이 Null ( 정보 없음 ) 으로 저장되는 것을 허용한다. null = True 는 디비 안에 허용 
+> 
+> blank = True 는 필드가 폼 ( 입력 방식 )에 빈 채로 저장되는 것을 허용 폼에는 디비에는 '' 로 저장이 된다. 
+
+null 이 인스턴스를 생성할 때 쓸 수 있는거구나

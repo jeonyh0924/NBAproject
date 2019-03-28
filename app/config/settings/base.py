@@ -50,6 +50,8 @@ ALLOWED_HOSTS = [
 AUTH_USER_MODEL = 'members.User'
 
 INSTALLED_APPS = [
+
+    'nba',
     'members',
     'django_extensions',
 
