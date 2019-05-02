@@ -15,7 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT_DIR = os.path.dirname(BASE_DIR)
-
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
 secrets = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
@@ -28,9 +28,13 @@ SECRET_KEY = secrets['SECRET_KEY']
 
 
 # Static
-# STATICFILES_DIRS = [
-#     STATIC_DIR,
-# ] 이게 서버 500 의 원인이 되었었다. 이게 왜 일까
+# settings.STATICFILES_DIRS
+# 장고 /static/<경로>/ 의 URL에서
+# 경로에 해당하는 부분을 검색할 폴더 목록에 대한 설정
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+# 이게 서버 500 의 원인이 되었었다. 이게 왜 일까
 
 
 STATIC_URL = '/static/'
@@ -47,12 +51,12 @@ ALLOWED_HOSTS = [
 
 
 #Auth
-AUTH_USER_MODEL = 'members.User'
+AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
-
-    'nba',
-    'members',
+    'users.apps.UsersConfig',
+    'posts.apps.PostsConfig',
+    'members.apps.MembersConfig',
     'django_extensions',
 
     'django.contrib.admin',
@@ -78,7 +82,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            TEMPLATES_DIR,
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,6 +135,6 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 

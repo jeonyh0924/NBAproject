@@ -15,9 +15,18 @@ def player_path(instance, filename):
     return a
 
 
+def post_path(instance, filename):
+    a = f'{instance.name}/{instance.name}.png'
+    return a
+
+
 class Team(models.Model):
     name = models.CharField(verbose_name='팀 이름', max_length=100)
     team_image = models.ImageField(upload_to=team_path, verbose_name='팀 사진', blank=True, null=True, default=True)
+
+    class Meta:
+        verbose_name = 'NBA 팀'
+        verbose_name_plural = f'{verbose_name} 목록'
 
     def __str__(self):
         return self.name
@@ -98,6 +107,10 @@ class Player(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = 'NBA 선수'
+        verbose_name_plural = f'{verbose_name} 목록'
+
     @staticmethod
     def crawler():
         from selenium import webdriver
@@ -143,6 +156,7 @@ class Player(models.Model):
                                                            'name',
                                                            ])
             # 선수별 url 접근
+
             for url in player_url:
                 driver.get(url)
                 time.sleep(2)
@@ -155,7 +169,8 @@ class Player(models.Model):
                 tr_data = season_stat_tbody[0].find_elements_by_tag_name('tr')
                 tr_data[0].find_elements_by_tag_name('td')
 
-                player_stats = [url.get_attribute("innerText") for url in tr_data[0].find_elements_by_tag_name('td')]
+                player_stats = [url.get_attribute("innerText") for url in
+                                tr_data[0].find_elements_by_tag_name('td')]
                 # NamedTuple
                 variable.MPG = player_stats[0]
                 variable.FGP = player_stats[1]
@@ -200,9 +215,11 @@ class Player(models.Model):
                     urllib.request.urlretrieve(player_img_src, f'static/{Teams[index].name}/{player_path}.png')
 
                     f = open(os.path.join(settings.BASE_DIR, f'static/{Teams[index].name}/{player_path}.png'), 'rb')
-
-                    player_path = Player.objects.create(
-                        # MPG 를 pycharm 에서 playin_time으로 작성함
+                    obj = Player.objects.get(name=f'{variable.name}')
+                    # player_path, is_boolean = Player.objects.get_or_create(
+                    # MPG 를 pycharm 에서 playin_time으로 작성함
+                except Player.DoesNotExist:
+                    obj = Player.objects.create(
                         name=variable.name,
                         team=Teams[index],
 
@@ -227,82 +244,15 @@ class Player(models.Model):
                         image=File(f),
                     )
                     f.close()
-                    print(player_path, " Created ===========")
+                    print(player_path, " Created ===========", Teams[index])
                 except FileExistsError:
                     print("already exists ", player_path)
+                    pass
+                except IndexError:
+                    print(player_path, "인덱스 에러 발생")
                     pass
 
     def call_by_crawler(player_model, requset, queryset):
         Player.crawler()
 
     call_by_crawler.short_description = "선수 버튼 실행"
-
-
-class User(AbstractUser):
-    player = models.ManyToManyField(Player, blank=True, null=True)
-
-
-class Post(models.Model):
-    content = models.TextField(verbose_name='작성 글', max_length=500)
-    created_at = models.DateTimeField(verbose_name='생성 날짜')
-    updated_at = models.DateTimeField(verbose_name='수정 날짜')
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-
-
-class Comment(models.Model):
-    content = models.TextField(verbose_name='작성 글', max_length=500)
-    created_at = models.DateTimeField(verbose_name='작성 날')
-    updated_at = models.DateTimeField(verbose_name='수정 날짜')
-    post = models.ForeignKey(
-        Post,
-        on_delete=models.CASCADE,
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-
-
-class Signature_team(models.Model):
-    user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
-    player = models.ManyToManyField(Player, blank=True, null=True)
-    player_limit = models.BooleanField(default=True)
-
-    def player_add_error(self, pk):
-        if not self.objects.get(pk=pk).player_limit:
-            return f'더 이상은 선수를 추가 할 수 없습니다.'
-
-    def player_limit_control(self, pk):
-        if self.objects.get(pk=pk).player.count() >= 5:
-            self.objects.get(pk=pk).player_limit = False
-            return self.objects.get(pk=pk).player_limit
-    # s_list = []
-    # player_max_count = 5
-    #
-    # def player_count(self, pk, player):
-    #     while self.player_max_count >= 1:
-    #         s = Signature_team.objects.get(pk=pk)
-    #         s.s_list.append(player)
-
-
-class Postlike(models.Model):
-    post = models.ForeignKey(
-        Post,
-        on_delete=models.CASCADE,
-    )
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-    )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-    )
-
-    class Meta:
-        # 특정 유저가 특정 포스트 좋아요를 누른 정보는 유니크 해야 함.
-        unique_together = (
-            ('post', 'user'),
-        )

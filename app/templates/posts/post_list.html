@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    {% for post in posts %}
+    <div class="col col-lg-4 offset-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header">
+                {{post.user}}
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{post.content}}</p>
+                <img src="{{ post.image.url}}" class ="card-img-top">
+
+            </div>
+        </div>
+    </div>
+    <!--<div><img src="{{ post.image.url}}" alt=""></div>-->
+    {% endfor %}
+
+</div>
+{% endblock %}
