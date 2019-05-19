@@ -169,8 +169,9 @@ class Player(models.Model):
                 tr_data = season_stat_tbody[0].find_elements_by_tag_name('tr')
                 tr_data[0].find_elements_by_tag_name('td')
 
+                #career stats
                 player_stats = [url.get_attribute("innerText") for url in
-                                tr_data[0].find_elements_by_tag_name('td')]
+                                tr_data[1].find_elements_by_tag_name('td')]
                 # NamedTuple
                 variable.MPG = player_stats[0]
                 variable.FGP = player_stats[1]

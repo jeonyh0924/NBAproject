@@ -22,6 +22,8 @@ def post_create(request):
         post = Post(
             user=request.user,
             image=request.FILES['photo'],
+            content=request.POST['comment'],
+
         )
         post.save()
         return redirect('posts:post-list')

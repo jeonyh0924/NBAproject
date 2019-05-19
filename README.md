@@ -170,3 +170,13 @@ HTTP 프로토콜은 비 연속적이다.
 https://github.com/Fastcampus-WPS-9th/Instagram/blob/f714808a06a787d30a4dee4d591721ee3dbf69a3/app/templates/posts/post_list.html
 강사님 깃
 	
+## 부트스트랩
+https://getbootstrap.com/docs/4.1/getting-started/introduction/
+
+## MVC로 패턴을 나누는 이유
+모델, 뷰 , 컨트롤을 따로 짜는 이유
+유지보수 관리 및 코드가 각자의 역할을 하기 위해
+폼은 데이터를 검증해주는 역할이다
+- 데이터를 받는 역할을 폼은 가지고 있다. 
+- 요청으로 부터 특정 데이터를 받는 역할도 있다. (request)
+- 

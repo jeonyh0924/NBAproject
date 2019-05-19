@@ -17,12 +17,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from django.views.generic import RedirectView
 
 from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     # /posts/ 로 들어오는 url 처리
+
+    # path('', RedirectView.as_view(pattern_name='posts:post-list'), name='index'), 아래 문장과 성능은 동일하며
+    # 위의 코드는 아래의 views.index로 갈 필요가 없다.
+    path('', views.index, name='index'),
     path('posts/', include('posts.urls')),
     path('users/', include('users.urls')),
 ]
