@@ -20,6 +20,8 @@ json
 
 ```
 
+#### 6월 중순에 학기가 끝나고 readme에 정리한 내용들을 깃 블로그에 정리해서 올릴 것 입니다. 
+
 ## settings.py
 STATICFILES_DIRS = [
     STATIC_DIR,
@@ -132,6 +134,7 @@ def add_player(self, player):
 
 
 ## django templates 
+
 * 이미지 절대경로 지정 ```<img src="{{ post.image.url}}">```
  
 > 해당 post 이미지의 절대 경로를 가져온다 
@@ -143,6 +146,8 @@ def add_player(self, player):
 
 
 기사 목록 꾸밀 bootstarp
+
+```
 <div class = 'container mt-2">
  {% for post in posts %}
  	<div class ="card mb-2">
@@ -155,6 +160,7 @@ def add_player(self, player):
 	<div>
 	{% endfor %}
 </div>
+```
 
 ## 세션과 쿠키
 HTTP 프로토콜은 비 연속적이다.
@@ -179,4 +185,95 @@ https://getbootstrap.com/docs/4.1/getting-started/introduction/
 폼은 데이터를 검증해주는 역할이다
 - 데이터를 받는 역할을 폼은 가지고 있다. 
 - 요청으로 부터 특정 데이터를 받는 역할도 있다. (request)
-- 
+- 받아온 데이터를 유효성 검사한다.
+- 유효성 검사에 실패하였다면 그 이유를 보여준다. 
+예를 들어 view에서 회원가입을 한다고 할 때
+기존에 데이터베이스 안에 아이디가 있다면 중복되는 아이디라는 오류를
+처리해주는 단계는 view에서도 처리 할 수 있지만, form에서 처리하는게 맞다.
+
+## Django form view
+https://docs.djangoproject.com/ko/2.2/topics/forms/
+
+```python
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
+from .forms import NameForm
+
+def get_name(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = NameForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/thanks/')
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        form = NameForm()
+
+    return render(request, 'name.html', {'form': form})
+```
+
+If we arrive at this view with a GET request, it will create an empty form instance and place it in the template context to be rendered. This is what we can expect to happen the first time we visit the URL.
+
+If the form is submitted using a POST request, the view will once again create a form instance and populate it with data from the request: form = NameForm(request.POST) This is called "binding data to the form" (it is now a bound form).
+
+We call the form's is_valid() method; if it's not True, we go back to the template with the form. This time the form is no longer empty (unbound) so the HTML form will be populated with the data previously submitted, where it can be edited and corrected as required.
+
+If is_valid() is True, we'll now be able to find all the validated form data in its cleaned_data attribute. We can use this data to update the database or do other processing before sending an HTTP redirect to the browser telling it where to go next.
+
+
+### forms.form :
+-required = 반드시 채워질 필요가 없다.
+- validators = 특정 함수를 정의할 수 있따. ***나중에 이거 관계5명 제한할때 응용??*** [181023 18 boundForm 57:00]
+
+
+### is_validation clean() method 회원가입, 로그인 에 대한 form 처리
+Field 하위 클래스의 clean() 메서드는 올바른 순서로 to_python(), validate(), run_validators()를 실행하고 오류를 전파합니다. ValidationError가 발생할 때 마다 유효성 검사가 중지되고, 해당 오류가 발생합니다. 이 메서드는 cleaned_data 딕셔너리를 반환.
+
+```python
+class Form:
+	field1 = forms.CharField()
+	field2 = forms.IntegerField()
+
+form = Form(reqest.POST)
+form.is_valid()
+이라는 간략한 과정이 있다면 form.is_valid()를 호출하는 순간
+```
+
+```
+field1.clean()
+	field1.to_python()
+	field1.validate()
+	field1.run_validators()
+	return field1의 value
+		-> form.cleaned_data[field1]
+form.clend_field1(self):
+	value = self.cleaned_data[field1]
+	if User.objects.filter(value= value).exists():
+		raise ValidationError('Username already exists')
+	return value
+field2.clean()
+form.clean_field2()
+필드에 대한 클린은 각각의 필드에 대한 유효성 검사를 한다.
+clean_fildname은 폼 차원에서 데이터가 논리적으로 올바른 데이터를 가지고 있는지에 대한 검사.
+
+form.clean()
+이 클린은 폼에 대한 클린이다. 폼에 있는 필드들 간 데이터를 검증한다.
+예를 들면 패스워드1과 패스워드2가 비밀번호가 일치하는지에 대한 검사 등을 말한다.
+또는 남성인데 주민번호 뒷자리가 2로 시작하면 검증 오류를 낸다거나 이러한 것이다. 
+```
+```field2.clean()``` 도 위와 같이 
+...
+이후
+```clean_<fieldname>()``` 이라는 메서드가 실행이 된다. 
+```form.clean_field1()``` 과 ```form.clean_field2```가 자동으로 생성이 된다. 
+
+
+```clean_<fieldname>()``` 메서드는 폼 서브 클래스에서 호출이 된다. 이 메서드는 필드의 유형과 관련이 없는 특정 속성에 특정한 모든 정리를 수행한다. 
+

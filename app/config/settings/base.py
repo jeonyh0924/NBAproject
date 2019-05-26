@@ -36,6 +36,8 @@ STATICFILES_DIRS = [
 ]
 # 이게 서버 500 의 원인이 되었었다. 이게 왜 일까
 
+# login_reuquired 데코레이터에 의해 로그인 페이지로 이동해야 할 때, 그 이동 할 URL의 URL pattern name
+LOGIN_URL = 'users:login'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')

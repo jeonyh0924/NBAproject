@@ -6,12 +6,42 @@
     <div class="col col-lg-4 offset-lg-4 mb-4">
         <div class="card">
             <div class="card-header">
-                {{post.user}}
+                {{post.title}}
             </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">{{post.user}}</th>
+                        <th scope="col">{{post.created_at}}</th>
+                        <th scope="col">{{post.id}}</th>
+                    </tr>
+                </thead>
+            </table>
             <div class="card-body">
-                <p class="card-text">{{post.content}}</p>
                 <img src="{{ post.image.url}}" class ="card-img-top">
+                <p class="card-text">{{post.content}}</p>
+                <p class="card-footer">{{post.tag}}</p>
+                <ul class="list-group">
+                    {% for comment in post.comments.all %}
+                    <li class="list-group-item ">
 
+                        <strong>{{ comment.author}}</strong>
+                        <span>{{ comment.content}}</span>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+                <!--댓글 작성 form 구현-->
+                <!-- 유저가 로그인을 한 경우에만 보여지도록 -->
+				{% if user.is_authenticated %}
+				<form action="{% url 'posts:comment-create' post_pk=post.pk %}"
+							method="POST">
+					{% csrf_token %}
+                    {{ comment_form.content }}
+					<button class="btn btn-primary btn-block"
+					        type="submit">댓글 작성</button>
+				</form>
+				{% endif %}
             </div>
         </div>
     </div>

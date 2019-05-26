@@ -10,12 +10,13 @@ class Post(models.Model):
         'users.User',
         on_delete=models.CASCADE,
     )
-
+    title = models.TextField(verbose_name='제목', max_length=40)
     content = models.TextField(verbose_name='작성 글', max_length=500)
+    tag = models.TextField(verbose_name='태그', max_length=50)
     created_at = models.DateTimeField(verbose_name='생성 날짜', auto_now_add=True, )
     # auto now add 는 객체가 save 될 때 마다 호
     updated_at = models.DateTimeField(verbose_name='수정 날짜', auto_now=True, null=True, blank=True)
-    image = models.ImageField(upload_to='post', verbose_name='게시글 이미지', blank=True, null=True, default=True)
+    image = models.ImageField(upload_to='post', verbose_name='업로드 이미지', blank=True, null=True, default=True)
     # 업로드 투 post_path 이거에서 바꿔봄
 
     class Meta:
@@ -29,17 +30,19 @@ class Comment(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
+        verbose_name='포스트',
+        related_name='comments',
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
     )
+    content = models.TextField(verbose_name='댓글 내용', max_length=500)
     tags = models.ManyToManyField(
         'HashTags',
         blank=True,
     )
     # 글쓴이
-    content = models.TextField(verbose_name='작성 글', max_length=500)
     created_at = models.DateTimeField(verbose_name='작성 날', auto_now_add=True, )
     updated_at = models.DateTimeField(verbose_name='수정 날짜', auto_now=True, )
 
