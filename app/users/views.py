@@ -1,9 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from users.models import User
-from .forms import LoginForm, SignupForm
+from .forms import LoginForm, SignupForm, UserProfileForm
 
 
 # Create your views here.
@@ -65,3 +67,18 @@ def signup_view(request):
     # signup.html에
     # 빈 form 또는 올바르지 않은 데이터에 대한 정보가 포함 된 form을 전달해서 동적으로 form 렌더
     return render(request, 'users/signup.html', context)
+
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+
+        form = UserProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, '프로필의 수정이 완료 되었습니다.')
+    form = UserProfileForm(instance=request.user)
+    context = {
+        'form': form,
+    }
+    return render(request, 'users/profile.html', context)

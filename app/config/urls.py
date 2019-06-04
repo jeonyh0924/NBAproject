@@ -20,6 +20,7 @@ from django.conf import settings
 from django.views.generic import RedirectView
 
 from . import views
+from posts.views import tag_post_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('posts/', include('posts.urls')),
     path('users/', include('users.urls')),
+    # path('explore/tags/<str:tag_name>/', tag_post_list, name='tag-post-list'),
 ]
 urlpatterns += static(
     prefix=settings.MEDIA_URL,

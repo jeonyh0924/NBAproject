@@ -130,7 +130,7 @@ class SignupForm(forms.Form):
         return data
 
     def save(self):
-        if forms.errors:
+        if self.errors:
             raise ValueError('폼의 데이터 유효성 검증에 실패를 하였습니다.')
         user = User.objects.create_user(
             username=self.cleaned_data['username'],
@@ -141,3 +141,30 @@ class SignupForm(forms.Form):
             last_name=self.cleaned_data['last_name'],
         )
         return user
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [
+            'img_profile',
+            'introduce',
+            'email',
+        ]
+        widgets = {
+            'email': forms.EmailInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'img_profile': forms.ClearableFileInput(
+                attrs={
+                    'class': 'form-control-file',
+                }
+            ),
+            'introduce':forms.Textarea(
+                attrs={
+                    'class': 'form-control'
+                }
+            ),
+        }

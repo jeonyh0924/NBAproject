@@ -87,6 +87,17 @@ class CommentCreateForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     # 1. posts.views.post_create
     # 2. templates/posts/post_create.html
+    # comment = forms.CharField(
+    #     required=False,
+    #     label='태그',
+    #     widget=forms.Textarea(
+    #         attrs={
+    #             'class': 'form-control',
+    #             'rows': 1,
+    #         }
+    #     )
+    # )
+
     class Meta:
         model = Post
         fields = [
@@ -116,7 +127,7 @@ class PostForm(forms.ModelForm):
             'tag': forms.Textarea(
                 attrs={
                     'class': 'form-control',
-                    'rows': 1,
+                    'rows':1,
                 }
             ),
         }

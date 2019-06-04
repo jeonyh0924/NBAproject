@@ -277,3 +277,126 @@ form.clean()
 
 ```clean_<fieldname>()``` 메서드는 폼 서브 클래스에서 호출이 된다. 이 메서드는 필드의 유형과 관련이 없는 특정 속성에 특정한 모든 정리를 수행한다. 
 
+
+
+### get_or_create
+
+```python
+obj, created = Person.objects.get_or_create(
+					first_name = 'John',
+					last_name = 'Lennon',
+					defaults = {'birthday': date(1940, 10, 9)},
+					)
+first_name과 last_name에 해당하는 내용을 get 하거나
+존재하지 않는다면 defaults에 포함된 내용까지 합쳐서 생성을 한다.
+
+이 때, 두개의 값을 리턴한다 -> 튜플 (obj, created) 
+get으로 가져오면 created는 False
+create 로 생성하면 created 는 True
+
+```
+
+
+```
+comment.tags.all()
+둘은 다대다 코멘트에서 관계를 걸었음
+```
+
+```
+https://whatisthenext.tistory.com/118
+
+jyh = User.objects.get(username='jyh')
+signature = SignatureTeam.objects.first()
+
+jyh.signature.player.count()
+
+nn = jyh.signatureteam.player
+
+nn.all()
+
+nn.first().name
+```
+
+### 해당하는 코멘트가 담긴 Post를 가져오는
+( Post 중에서 해당 Post에 속한 Comment가 가진, HashTags들 중에서 name이 '~~~'인 Tag가 있는 Post 목록을 가져오기 )
+
+
+### 내 생각에 model.py에서 is_valid와 save 메서드를 바꿔서 선수들을 추가하는 상황을 만들어야 할 듯?
+1025 30 31:00
+
+[정규표현식](https://wikidocs.net/4309)
+
+
+## 쿼리 보는 방법
+예제) q = Post.objects.filter(commnet__tags__name='슬기')
+
+print(q.query)
+
+
+### djagno docs Commen Web application tools에서 Customizing authenticatoin 을 하는 일반적인경우는
+-> User 모델을 바꾸는 목적
+기존에 서비스 중인 유저 모델에 추가로 정보를 붙여서 디비를 손봐야 하는 경우
+> 프록시를 쓰거나 ( 동작 변경 )
+> 
+> 사용자와 관련된 정보를 더 저장해야 하는 경우 ( DB의 필드가 더 필요한 경우)에는 OtO 필드를 추가한다. 
+
+
+## django docs the message framework
+어떤 리퀘스트가 왔을 떄 다음번 리스펀스에 특정 내용을 담아 보내주는 역할을 한다. 
+
+> 완료의 표시는 render를 할 때에는 그 내용을 전달 할 수 있다.-> 여러가지 데이터를 context에 담아서 보낼 수 있다. 그래서 템플릿을 통해 여러가지를 보여주는게 가능하다.
+> redirect를 하면 전해줄 방법이 없다 -> 데이터를 보내서 담을 수 없기 때문이다. 브라우저에게 이동의 명령을 내리기 때문이다.
+
+이래서 redirect의 상황에서 메세지를 보여주기 위해 message framework를 사용하게 된다. 
+
+```
+messages framework를 쓰는 경우
+request
+-> view( messages에 알림 데이터와 어떤 client에게 보내야 하는지를 저장한다. )
+django_session 테이블에 있는 특정 session_id 값과 클라이언트(쿠키) 가 가지고 있는 session_id값을 비교해서 clien를 특정화 
+-> redirect
+-> view (이 client에게 message가 있다면, render 시 해당 데이터를 함께 context에 담아서 전송 )
+-> render (message가 전달 한 알림 데이터를 표시)
+```
+## PostLike 모델 구현 이론적으로 세워보기
+Like 기능
+> PostList에서 작동이 가능
+> 사용자의 Post의 'Like'버튼을 눌러서 좋아요 객체를 생성
+
+Post
+> 이 Post에 PostLike를 가진 User 목록
+> like_users = ManyToManyField('User',
+> 	# 특정 User의 기준으로 내가 like_users인 Post목록
+> 	# 내가 Like를 한 Post의 목록
+> 	related_name = 'like_posts'
+>	related_query_name = 'like_post')
+
+User
+
+PostLike 객체
+	user
+	post
+	created_at
+	
+## 소셜 로그인 
+상세 - 가입
+```
+웹 사이트 A에 사용자가 접속
+페이스북으로 로그인 버튼을 클릭
+Django가 사용자를 페이스북에 넘겨준다. 
+	우리가 너의 정보를 쓸 것인데 페이스북에서 허용을 눌러줘
+	facebook.com/<로그인 관련>/<특정 APP ID>/
+사용자가 페이스북에서 해당 내용에 대해 허용을 하면
+페이스북이 Django에게 특정 '토큰'을 넘겨준다.
+'토큰'은 특정 페이스북 사용자의 '특정권한'에 접근을 할 수 있는 '키'이다.
+Django는 '토큰'을 사용하여 '특정 페이스북 사용자'의 정보를 가져와서 자신의 서비스에 DjangoUser를 생성하는데 사용한다. 
+인증에 사용하는 값은 '페이스북 유저의 특정 값' <- '토큰'을 사용하여 알아낼 수 있다.	
+```
+
+상세 - 로그인 
+```
+웹 사이트 A에 로그인
+페이스북으로 로그인 버튼 클릭
+Django가 사용자를 페이스북에 넘겨준다. 
+	우리가 너의 정보를 쓸 것인데 페이스북에서 허용을 눌러줘(
+```
