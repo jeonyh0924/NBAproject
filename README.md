@@ -16,6 +16,8 @@ pip
 json
 {
 	"SECRET_KEY":"<Django secret key>"
+	"FACEBOOK_APP_ID":<Facebook app id>,
+	"FACEBOOK_APP_SECRET":"<Facebook app Secret>"
 }
 
 ```
@@ -398,5 +400,7 @@ Django는 '토큰'을 사용하여 '특정 페이스북 사용자'의 정보를 
 웹 사이트 A에 로그인
 페이스북으로 로그인 버튼 클릭
 Django가 사용자를 페이스북에 넘겨준다. 
-	우리가 너의 정보를 쓸 것인데 페이스북에서 허용을 눌러줘(
+	우리가 너의 정보를 쓸 것인데 페이스북에서 허용을 눌러줘 -> 이미 눌려있으니 다음단계
+'토큰'을 받아온 뒤 '토큰'을 사용하여 '특정 페이스북 사용자'의 정보를 가져와서 이미 우리가 가지고 있는 DjangoUser의 '특정 페이스북 값'과 비교 존재한다면 Django 로그인처리
 ```
+

@@ -18,14 +18,15 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
+
+# .secrets/base.json에 있는 데이터를 파싱하여 파이썬 dict가져옴
 secrets = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
+FACEBOOK_APP_ID = secrets['FACEBOOK_APP_ID']
+FACEBOOK_APP_SECRET = secrets['FACEBOOK_APP_SECRET']
 
 STATIC_DIR = os.path.join(ROOT_DIR, 'static')
 
-
 SECRET_KEY = secrets['SECRET_KEY']
-
-
 
 # Static
 # settings.STATICFILES_DIRS
@@ -39,6 +40,12 @@ STATICFILES_DIRS = [
 # login_reuquired 데코레이터에 의해 로그인 페이지로 이동해야 할 때, 그 이동 할 URL의 URL pattern name
 LOGIN_URL = 'users:login'
 
+# authenticate() 함수를 호출 시 사용할 백엔드 목록
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'users.backends.FacebookBackEnd',
+                           ]
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 
@@ -51,8 +58,7 @@ ALLOWED_HOSTS = [
     '.amazonaws.com',
 ]
 
-
-#Auth
+# Auth
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
@@ -66,7 +72,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
 
     'django_extensions',
 ]
@@ -103,10 +108,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 
 
 # Password validation
@@ -127,7 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -140,5 +142,3 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = False
-
-

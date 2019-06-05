@@ -1,11 +1,21 @@
+import imghdr
+import io
+import json
+from pprint import pprint
+
+import requests
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from users.models import User
 from .forms import LoginForm, SignupForm, UserProfileForm
+
+User = get_user_model()
 
 
 # Create your views here.
@@ -82,3 +92,12 @@ def profile(request):
         'form': form,
     }
     return render(request, 'users/profile.html', context)
+
+
+def facebook_login(request):
+    user = authenticate(request, facebook_request_token=request.GET.get('code'))
+    if user:
+        login(request, user)
+        return redirect('posts:post-list')
+    messages.error(request, '페이스북 로그인에 실패를 하였습니다.')
+    return redirect('users:login')
