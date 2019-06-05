@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
+        <!--socialaccount 라는 외부의 기능을 html에 뿌리기 위해서 로드한다. static로드 하는 개념이라는데-->
 
 {% block content %}
 <!--
@@ -27,9 +29,13 @@ col - sm : 작은 화면
         <small class="form-text text-center text-danger font-weight-bold">{{error}}</small>
         {% endfor %}
 
-        <button class="btn btn-primary btn-block" type="submit">로그인</button>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">로그인</button>
         <a href="https://www.facebook.com/v3.3/dialog/oauth?client_id=2758070464266486&redirect_uri=http://localhost:8000/users/facebook-login/"
            class="btn btn-lg btn-info btn-block">페이스북 로그인</a>
+
+        <a href="{% provider_login_url 'google' %}" class="btn btn-block btn-lg btn-light">구글 로그인</a>
+
+
     </form>
 </div>
 {% endblock %}

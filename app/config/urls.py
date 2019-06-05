@@ -32,6 +32,9 @@ urlpatterns = [
     path('posts/', include('posts.urls')),
     path('users/', include('users.urls')),
     # path('explore/tags/<str:tag_name>/', tag_post_list, name='tag-post-list'),
+    # 이미 존재하는 url
+    path('accounts/', include('allauth.urls')),
+
 ]
 urlpatterns += static(
     prefix=settings.MEDIA_URL,

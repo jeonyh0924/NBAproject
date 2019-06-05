@@ -404,3 +404,64 @@ Django가 사용자를 페이스북에 넘겨준다.
 '토큰'을 받아온 뒤 '토큰'을 사용하여 '특정 페이스북 사용자'의 정보를 가져와서 이미 우리가 가지고 있는 DjangoUser의 '특정 페이스북 값'과 비교 존재한다면 Django 로그인처리
 ```
 
+
+## 구글 로그인 
+### pip 초기 기본 세팅
+```pip install django-allauth```
+
+### settings.py에 입력을 할 부분
+INSTALLED_APPS의 부분에 **django.contrib.sites,	allauth,	 allauth.account, 	allauth.socialaccount**를 추가하여준다. 
+그리고 provider라는 것을 추가 해 줄 것인데 이것은 소셜로그인 기능을 제공해주는 서비스 업체를 프로바이더라 칭한다. 장고에서 사용할 수 있는 프로바이더는 찾아보면 정말 많이 있다. 그래서 provider.[원하는 social-soccial-service]를 추가하면 다른 소셜로그인 기능이 추가되는 개념이라 생각하면 될 것 같다.   **'allauth.socialaccount.provider.google'** 도 추가해준다.
+
+``` 
+# social_login_google 을 위해 settings.py에 전역변수로 설정
+SITE_ID = 1
+LOGIN_REDIRECT_URL='/'
+```
+
+-------
+
+### urls.py
+django-allauth를 다운 받게 되면서 생기는 url의 패턴을 추가한다
+```path('accounts/', include('allauth.urls')),```
+이미 존재하는 url 이므로 이 안에서 소셜로그인을 통한 처리는 일어난다. 
+
+-------
+settings.py 와 urls.py의 내용을 추가하였다면 ```./manage.py migrate 실행```하고 runserver , local/admin에 들어가서 마이그레이션이 잘 되었나 확인을 해보자 site, social accoutn, authentication and authorization 등이 추가 되었을 것이다
+
+### admin 설정
+- sites에 들어가서 example에 있는 주소를 로컬기준 127.0.0.1:8000으로 도메인 명과 표시 명을 바꾸어 준다. 
+
+- 홈>소셜 계정 >소셜 어플리케이션 > 소셜 어플리케이션 추가 의 페이지로 들어가면 키를 입력하라고 한다
+- ```console.developers.google.com``` 에 들어가서 소셜로그인을 위한 승인과정을 거친다.              
+
+- 앱을 만들고
+- 사용자 인증정보에서 OAuth 클릭
+- 그런 다음 동의화면구성을 누르고
+- 동의화면에서 애플리케이션 이름을 정한다
+- 그 다음 사용자 인증정보에서 다시 OAuth클릭
+- 애플리케이션 유형은 웹을 누르고 제한사항에서 자바스크립트 원본과 리디렉션은 로컬기준으로 http://localhost:8000
+- 그리고 저장을 누르면 클라이언트 ID와 키가 발급된다.**클라이언트 아이디와 키를 끄지 말고 이 상태에서 django-admin으로 돌아와서 키를 넣어야 한다.**
+- 다시 admin의 홈>소셜 계정 >소셜 어플리케이션 > 소셜 어플리케이션 추가 의 페이지로 돌아와서 클라이언트 ID와 비밀키를 기입한다.
+- 그리고 이용 가능한 사이트에 있는 목록에서 선택된 사이트로 더블클릭 또는 화살표 ui를 통해서 이동시킨다.
+- 그리고 저장을 누른 뒤 html을 작성하자.
+### login-page for html
+
+```python
+{% load socialaccount %} 이걸 로그인하는 html의 맨 위에 둔다
+{% extends 'base.html'%} 이 존재한다면 그 아래에 둔다
+socialaccount 기능을 쓰기 위한 코드
+
+
+# 로그인 버튼 자리 안에 넣어준다.
+<a href="{% provider_login_url 'google' %}">구글 로그인</a>
+이 a태그를 추가하면 구글 로그인을 수행하여 준다.
+
+# <a href="/accounts/signup">구글 회원가입</a><br> 이건 allauth에서 지원해주는 회원가입 기능으로 보내주는 태그
+```
+
+오류 발생시 
+callback에러
+>```console.developers.google.com```에서 OAuth        클라이언트ID 만들기 과정 속에 있던 승인된 리디렉션 URI에
+>http://localhost:8000/accounts/google/login/callback/
+>를 추가하여준다.

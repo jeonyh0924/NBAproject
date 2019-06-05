@@ -40,11 +40,19 @@ STATICFILES_DIRS = [
 # login_reuquired 데코레이터에 의해 로그인 페이지로 이동해야 할 때, 그 이동 할 URL의 URL pattern name
 LOGIN_URL = 'users:login'
 
+# social_login_google
+SITE_ID = 1
+LOGIN_REDIRECT_URL='/'
+
+
 # authenticate() 함수를 호출 시 사용할 백엔드 목록
 AUTHENTICATION_BACKENDS = [
+    # 리스트말고 튜플이라는데 좀 이따가 안되면 수정해보
     'django.contrib.auth.backends.ModelBackend',
     'users.backends.FacebookBackEnd',
-                           ]
+    # allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
@@ -66,6 +74,7 @@ INSTALLED_APPS = [
     'posts.apps.PostsConfig',
     'members.apps.MembersConfig',
 
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,6 +83,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_extensions',
+
+    # allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # provider
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [

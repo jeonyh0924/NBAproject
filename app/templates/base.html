@@ -51,7 +51,7 @@
                 <li class="nav-item">
                     <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">Profile
                     {% if user.is_authenticated %}
-                        ({{ user.username }})
+                        ({{ user.first_name }})
                     {% endif %}
                     </a>
                 </li>
