@@ -42,8 +42,7 @@ LOGIN_URL = 'users:login'
 
 # social_login_google
 SITE_ID = 1
-LOGIN_REDIRECT_URL='/'
-
+LOGIN_REDIRECT_URL = '/'
 
 # authenticate() 함수를 호출 시 사용할 백엔드 목록
 AUTHENTICATION_BACKENDS = [
@@ -91,6 +90,7 @@ INSTALLED_APPS = [
 
     # provider
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.naver',
 ]
 
 MIDDLEWARE = [
