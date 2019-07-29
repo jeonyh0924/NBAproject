@@ -1,4 +1,4 @@
-# docker build -t eb:docker -f Dockerfile .
+    # docker build -t eb:docker -f Dockerfile .
 FROM        jeonyh0924/eb-docker:base
 
 # settings 모듈에 대한 환경변수 설정

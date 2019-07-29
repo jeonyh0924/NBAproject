@@ -51,7 +51,7 @@ class Post(models.Model):
             self.postTags.set(tags)
 
         save_html()
-        super().save(*args, **kwargs)
+
         save_tags()
 
     @property
@@ -198,3 +198,5 @@ class Postlike(models.Model):
         unique_together = (
             ('post', 'user'),
         )
+
+

@@ -59,6 +59,10 @@ STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
+CRONJOBS = [
+    ('*/26 * * * *', 'BASE_DIR.cron.my_cron_job')
+]
+
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
@@ -69,9 +73,15 @@ ALLOWED_HOSTS = [
 AUTH_USER_MODEL = 'users.User'
 
 INSTALLED_APPS = [
+    'django_celery_beat',
+    'django_celery_results',
+    'django_crontab',
+
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
     'members.apps.MembersConfig',
+
+    'news',
 
     'django.contrib.sites',
     'django.contrib.admin',

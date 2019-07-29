@@ -35,7 +35,7 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team']
     list_per_page = 15
     list_filter = ['team', 'position']
-    ordering = ['pk', ]
+    ordering = ['-pk', ]
     actions = [make_objects]
     search_fields = ['team__name', 'back_number', 'name']
 

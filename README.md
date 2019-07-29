@@ -24,6 +24,9 @@ json
 
 #### 6월 중순에 학기가 끝나고 readme에 정리한 내용들을 깃 블로그에 정리해서 올릴 것 입니다. 
 
+[정규표현식](https://highcode.tistory.com/6)
+
+[모델링 정방향 역방향] (https://whatisthenext.tistory.com/118)
 ## settings.py
 STATICFILES_DIRS = [
     STATIC_DIR,
@@ -32,9 +35,10 @@ STATICFILES_DIRS = [
 2. settings.STATICFILES_DIRS 리스트 내의 경로목록 각각의 하위 위치에서 해당 파일을 검색하며 존재한다면 그 파일을 리턴해준다. 
 
 ### 크롤링 사이트 참고 - 파일 경로 설정
-https://thispointer.com/how-to-create-a-directory-in-python/
+
+[파일경로설정](https://thispointer.com/how-to-create-a-directory-in-python/)
 ### 셀리니움 
-https://selenium-python.readthedocs.io/locating-elements.html
+[셀레니움](https://selenium-python.readthedocs.io/locating-elements.html)
 
 
 ###s3 시행착오
@@ -60,10 +64,12 @@ https://selenium-python.readthedocs.io/locating-elements.html
 
 
 ## django admin 커스터마이징
-https://www.slideshare.net/bbayoung7849/djangoadminsitecustomexample  박영우 님의 파이콘 한국 2017 발표자료
+[박영우 님의 파이콘 한국 2017 발표자료]
+(https://www.slideshare.net/bbayoung7849/djangoadminsitecustomexample)
 
-https://teamlab.github.io/jekyllDecent/blog/tutorials/Django-Admin-%EC%BB%A4%EC%8A%A4%ED%84%B0%EB%A7%88%EC%9D%B4%EC%A7%95
-장고 어드민 스타일링
+[장고 어드민 스타일링]
+(https://teamlab.github.io/jekyllDecent/blog/tutorials/Django-Admin-%EC%BB%A4%EC%8A%A4%ED%84%B0%EB%A7%88%EC%9D%B4%EC%A7%95)
+
 
 * settings에서 installed_apps = {
 	'<modulename>.apps.<Modulename>Config'
@@ -457,6 +463,8 @@ settings.py 와 urls.py의 내용을 추가하였다면
 - 그 다음 사용자 인증정보에서 다시 OAuth클릭
 - 애플리케이션 유형은 웹을 누르고 제한사항에서 자바스크립트 원본과 리디렉션은 로컬기준으로 http://localhost:8000
 
+
+
 - 그리고 저장을 누르면 클라이언트 ID와 키가 발급된다.**클라이언트 아이디와 키를 끄지 말고 이 상태에서 django-admin으로 돌아와서 키를 넣어야 한다.**
 - 다시 admin의 홈>소셜 계정 >소셜 어플리케이션 > 소셜 어플리케이션 추가 의 페이지로 돌아와서 클라이언트 ID와 비밀키를 기입한다.
 - 그리고 이용 가능한 사이트에 있는 목록에서 선택된 사이트로 더블클릭 또는 화살표 ui를 통해서 이동시킨다.
@@ -484,3 +492,8 @@ callback에러
 
 
 ### 설정 - 네이버
+#### settings
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+	'allauth.account.auth_backends.AuthenticationBackend',
+]
