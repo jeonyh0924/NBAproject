@@ -22,7 +22,7 @@ class newsHeadlines(models.Model):
             newsHeadlines.objects.create(
                 title=news_title,
             )
-        # driver.close()
+        driver.close()
         # news anchor
         # news_title_list_name = driver.find_elements_by_xpath(
         #     '//*[@id="main-container"]/div/section[3]/div[1]/section/ul/li/a')

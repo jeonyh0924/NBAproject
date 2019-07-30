@@ -29,7 +29,11 @@ app.conf.update(
     CELERYBEAT_SCHEDULE={
         'add-first-of-every-month': {
             'task': 'news.tasks.headlines_crawling',
-            'schedule': crontab(minute='*/15'),
+            # 10분 간격 실행
+            # 'schedule': crontab(minute='*/10'),
+
+            # 매일 자정 실행
+            'schedule': crontab(minute=0, hour=0),
             'args': (),
         },
     }
