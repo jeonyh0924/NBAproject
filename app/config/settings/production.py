@@ -1,69 +1,38 @@
+import requests
 from .base import *
 
-secrets = json.load(open(os.path.join(SECRET_DIR, 'production.json')))
+production_secrets = json.load(open(os.path.join(SECRET_DIR, 'production.json')))
 
-DEBUG = False
+DEBUG = True
 
-WSGI_APPLICATION = 'config.wsgi.production.application'
+# 아마존에서 제공해주는 URL에 접속을 허용하는 코드
+ALLOWED_HOSTS = production_secrets['ALLOWED_HOSTS']
 
-DATABASES = secrets['DATABASES']
-
-# .static 을 Storage 공간으로 사용하려면 아래 설정을 주석 처리 해야한다.
-DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
-
-AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = secrets['AWS_STORAGE_BUCKET_NAME']
+# postgre
+DATABASES = production_secrets['DATABASES']
 
 # s3 버전 및 지역 설정
 AWS_S3_SIGNATURE_VERSION = 's3v4'
 AWS_S3_REGION_NAME = 'ap-northeast-2'
 
 
-# 로그폴더 생성
-LOG_DIR = os.path.join(ROOT_DIR, '.log')
-if not os.path.exists(LOG_DIR):
-    os.makedirs(LOG_DIR, exist_ok=True)
+# s3
+AWS_STORAGE_BUCKET_NAME = production_secrets['AWS_STORAGE_BUCKET_NAME']
 
-LOGGING = {
-    'version': 1,
-    'formatters': {
-        'default': {
-            'format': '[%(levelname)s] %(name)s (%(asctime)s)\n\t%(message)s'
-        },
-    },
-    'handlers': {
-        'file_error': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'level': 'ERROR',
-            'filename': os.path.join(LOG_DIR, 'error.log'),
-            'formatter': 'default',
-            'maxBytes': 1048576,
-            'backupCount': 10,
-        },
-        'file_info': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'level': 'INFO',
-            'filename': os.path.join(LOG_DIR, 'info.log'),
-            'formatter': 'default',
-            'maxBytes': 1048576,
-            'backupCount': 10,
-        },
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'INFO',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': [
-                'file_error',
-                'file_info',
-                'console',
-            ],
-            'level': 'INFO',
-            'propagate': True,
-        },
-    }
-}
+# Health Check 도메인을 허용하는 코드
+try:
+    EC2_IP = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4').text
+    ALLOWED_HOSTS.append(EC2_IP)
+except requests.exceptions.RequestException:
+    pass
+
+WSGI_APPLICATION = 'config.wsgi.production.application'
+
+
+# .static 을 Storage 공간으로 사용하려면 아래 설정을 주석 처리 해야한다.
+DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+
+# Health Check 도메인을 허용하는 코드
+
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 

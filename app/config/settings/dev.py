@@ -1,23 +1,16 @@
 from .base import *
 
-secrets = json.load(open(os.path.join(SECRET_DIR, 'dev.json')))
+dev_secrets = json.load(open(os.path.join(SECRET_DIR, 'dev.json')))
 
 DEBUG = True
 
-ALLOWED_HOSTS = secrets['ALLOWED_HOSTS']
+ALLOWED_HOSTS = dev_secrets['ALLOWED_HOSTS']
 
 WSGI_APPLICATION = 'config.wsgi.dev.application'
 
 # postgre
-# DATABASES = secrets['DATABASES']
+DATABASES = dev_secrets['DATABASES']
 
-# SQlite3
-DATABASES = {
-     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-    }
-}
 
 # django -storages
 # ~/.aws/credentials
@@ -30,6 +23,4 @@ STATICFILES_STORAGE = 'config.storages.StaticStorage'
 # 위 설정 시 S3 프리티어 기본 PUT 한계를 금방 초과하게 되므로
 # STATIC_ROOT에 collectstatic 후 Nginx 에서 제공하는 형태로 사용
 
-AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME =secrets['AWS_STORAGE_BUCKET_NAME']
+AWS_STORAGE_BUCKET_NAME = dev_secrets['AWS_STORAGE_BUCKET_NAME']

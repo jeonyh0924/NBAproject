@@ -497,3 +497,82 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 	'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+
+## RDS 설정 
+Django 와 연관성이 좋은 postgre-sql 
+postgreSQL은 기본적으로 5432 포트를 쓰게 되어있다.
+
+설정 사항들 
+
+- 템플릿 - 프리티어
+- 디비 인스턴스 크기 	버스터블 	t클래스 t2.micro
+- 스토리지 할당 20 , 자동 조정 비활성화 
+- 다중 AZ 배포 비활성화 
+- VPC는 ECS를 위해 따로 만들었던 로드벨런서 
+- 퍼블릭 엑세스는 yes
+- EC2 보안그룹은 새로 생성하고 이름은 :```RDS Security Group```
+
+```python
+# DB
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': '<RDS에 생성 된 엔드포인트>', 
+        'NAME': '<RDS 설정 시 데이터베이스 이름>',
+        'USER': '<RDS 설정 시 master username>',
+        'PASSWORD': '<RDS 설정 시 암호>',
+        'PORT': 5432,
+    }
+}
+# postgresql은 기본적으로 포트 5432를 쓰게 되어있다.
+# 네임은 RDS 설정 시 데이터베이스 이름
+# 유저는 RDS 설정 시 master username
+```
+
+## 에러 상황
+- export config/settings/dev 에서 ./manage.py migrate상황 시, psycopg2에 대한 모듈 에러가 발생한다면 이것은 Django에서 postgresql을 사용할 수 있도록 도와주는 라이브러리이다. 
+```pip install psycopg2-binary``` 를 쉘에서 실행하면 된다. 
+
+- ```could not connect to server timed out```은 EC2 보안그룹에서 아까 생성 하였던, RDS Security Group을 클릭 한 뒤 인바운드 편집에서 ```편집 ->``` 유형은 postgre 포트 5432 소스는 원하는 상황으로 한 뒤 다시 app에서 ./maange.py migrate하면 된다. 
+
+## settings 변경
+> .secrets에 DATABAES에 대한 정보를 저장 한 뒤, settings에서 불러오는 것을 추천한다. 
+
+```python
+# ex )proj/app/config/settings/dev.py
+dev_secrets = json.load(open(os.path.join(SECRET_DIR, 'dev.json')))
+
+DATABASES = dev_secrets['DATABASES']
+
+
+# proj/.secrets/dev.json
+{
+	"DATABASES": {
+    "default": {
+      "ENGINE": "django.db.backends.postgresql",
+      	 "HOST": "<RDS에 생성 된 엔드포인트>", 
+        "NAME": "<RDS 설정 시 데이터베이스 이름>",
+        "USER": "<RDS 설정 시 master username>",
+        "PASSWORD": "<RDS 설정 시 암호>",
+      "PORT": 5432
+    }
+  }
+}
+```
+
+- 개발용 디비와 서비스용 디비는 가르는 것이 좋다. 
+- 데이터베이스 서버와 서버 안에 데이터베이스들이 여러개가 있는 것은 다른것임을 우리는 안다. 
+
+## DB 접속하기 - psql
+
+1. 쉘 ```mac 기준 brew install postgresql```
+2. 쉘 ```psql --user=<RDS user> --host=<엔드포인트> postgres```
+3.  비밀번호 입력 후 접속
+4.  디비를 나누기 원한다면 CREATE DATABASE <DB명> OWNER <user>;
+5. \l을 누르면 목록이 나온다
+6. 생성한 디비에 접속하고 싶다면 생성한 디비명을 아까 2번의 명령어 뒤의 postgresql을 지우고, 생성한 디비명을 입력한다. 
+7. 분리를 하였다면, .secrets에 있는 dev나 production의 DATABASES NAME을 생성한 디비명으로 바꾸어준다.
+
+
+만약 접속이 안될시 장소를 바꾼 것이라면 EC2의 보안그룹에서 RDS Security Group의 인바운드를 추가해준다. 
