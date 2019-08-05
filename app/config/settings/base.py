@@ -18,24 +18,28 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
-
 # .secrets/base.json에 있는 데이터를 파싱하여 파이썬 dict가져옴
 secrets = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
+# Django secret key
+SECRET_KEY = secrets['SECRET_KEY']
+
+
 FACEBOOK_APP_ID = secrets['FACEBOOK_APP_ID']
 FACEBOOK_APP_SECRET = secrets['FACEBOOK_APP_SECRET']
 
-STATIC_DIR = os.path.join(ROOT_DIR, 'static')
 
-SECRET_KEY = secrets['SECRET_KEY']
-
-# Static
-# settings.STATICFILES_DIRS
-# 장고 /static/<경로>/ 의 URL에서
-# 경로에 해당하는 부분을 검색할 폴더 목록에 대한 설정
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    STATIC_DIR,
+    os.path.join(ROOT_DIR, '.static/admin'),
+    os.path.join(ROOT_DIR, '.static/bootstrap'),
+    os.path.join(ROOT_DIR, '.static/images'),
+    # os.path.join(ROOT_DIR, 'app/static/images'),
+    # 이전에 했던게 이거
 ]
-# 이게 서버 500 의 원인이 되었었다. 이게 왜 일까
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 # login_reuquired 데코레이터에 의해 로그인 페이지로 이동해야 할 때, 그 이동 할 URL의 URL pattern name
 LOGIN_URL = 'users:login'
@@ -53,21 +57,9 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
-
 CRONJOBS = [
     ('*/26 * * * *', 'BASE_DIR.cron.my_cron_job')
 ]
-#
-# ALLOWED_HOSTS = [
-#     'localhost',
-#     '127.0.0.1',
-#     '.amazonaws.com',
-# ]
 
 # Auth
 AUTH_USER_MODEL = 'users.User'
