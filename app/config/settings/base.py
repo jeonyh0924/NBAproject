@@ -44,7 +44,7 @@ MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 # login_reuquired 데코레이터에 의해 로그인 페이지로 이동해야 할 때, 그 이동 할 URL의 URL pattern name
 LOGIN_URL = 'users:login'
 
-# social_login_google
+# social_login_google - allauth
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
@@ -75,7 +75,6 @@ INSTALLED_APPS = [
 
     'news',
 
-    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,6 +85,7 @@ INSTALLED_APPS = [
     'django_extensions',
 
     # allauth
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',

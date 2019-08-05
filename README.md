@@ -453,7 +453,10 @@ settings.py 와 urls.py의 내용을 추가하였다면
 ### admin 설정 - 구글
 - sites에 들어가서 example에 있는 주소를 로컬기준 127.0.0.1:8000으로 도메인 명과 표시 명을 바꾸어 준다. 
 
-- 홈>소셜 계정 >소셜 어플리케이션 > 소셜 어플리케이션 추가 의 페이지로 들어가면 키를 입력하라고 한다
+- 홈>소셜 계정 >소셜 어플리케이션 > 소셜 어플리케이션 추가 
+- 의 페이지로 들어가서 제공자(provider)에 해당 사이트 ( setting.py에서 추가한 사이트가 뜰 것임 )
+- 이름은 원하는대로
+- 클라이언트와 비밀키는 해당 사이트에서 발급받아야 함
 - ```console.developers.google.com``` 에 들어가서 소셜로그인을 위한 승인과정을 거친다.              
 
 - 앱을 만들고
@@ -467,6 +470,7 @@ settings.py 와 urls.py의 내용을 추가하였다면
 
 - 그리고 저장을 누르면 클라이언트 ID와 키가 발급된다.**클라이언트 아이디와 키를 끄지 말고 이 상태에서 django-admin으로 돌아와서 키를 넣어야 한다.**
 - 다시 admin의 홈>소셜 계정 >소셜 어플리케이션 > 소셜 어플리케이션 추가 의 페이지로 돌아와서 클라이언트 ID와 비밀키를 기입한다.
+- 여기서 기존에 이미 만들었다면 ```console.developers.google.com``` 페이지에서 해당 ID에 들어가 클라이언트 아이디와 시크릿 패스워드를 알아낸다
 - 그리고 이용 가능한 사이트에 있는 목록에서 선택된 사이트로 더블클릭 또는 화살표 ui를 통해서 이동시킨다.
 - 그리고 저장을 누른 뒤 html을 작성하자.
 #### login-page for html
@@ -576,3 +580,10 @@ DATABASES = dev_secrets['DATABASES']
 
 
 만약 접속이 안될시 장소를 바꾼 것이라면 EC2의 보안그룹에서 RDS Security Group의 인바운드를 추가해준다. 
+
+
+## SocialApp matching query does not exist. 에러 발생
+SocialApp matching query does not exist.
+
+![ERD](/assets/SocialApp/SocialApp.png)
+이 발생한다면 디비를 엎은 후, admin에 설정이 없기 때문 다시 가서 클라이언트 아이디와 패스워드를 받아온다. 
