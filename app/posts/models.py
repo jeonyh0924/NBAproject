@@ -21,6 +21,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(verbose_name='수정 날짜', auto_now=True, null=True, blank=True)
     image = models.ImageField(upload_to='post', verbose_name='업로드 이미지', blank=True, null=True, default=True)
     postTags = models.ManyToManyField('HashTags', blank=True, )
+    # save가 호출 될 때, 필드를 자동으로 채운 후 저장한다.
     _html = models.TextField('태그가 html화 된 댓글 내용', blank=True)
 
     like_users = models.ManyToManyField(
@@ -51,7 +52,7 @@ class Post(models.Model):
             self.postTags.set(tags)
 
         save_html()
-
+        super().save(*args, **kwargs)
         save_tags()
 
     @property
@@ -198,5 +199,3 @@ class Postlike(models.Model):
         unique_together = (
             ('post', 'user'),
         )
-
-

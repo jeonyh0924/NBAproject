@@ -1,9 +1,13 @@
+import os
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.files import File
 from django.db import models
 import datetime
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
 def team_path(instance, filename):
     a = f'{instance.name}/{instance.name}.svg'
@@ -52,14 +56,15 @@ class Team(models.Model):
         team_img_urls = driver.find_elements_by_xpath("//div/div/div[@class='team__list']/img")
         team_img_url = [url.get_attribute("src") for url in team_img_urls]
 
+        os.mkdir(f'nbaImages')
         for url, name in zip(team_img_url, team_name):
 
             try:
                 # Create target Directory
-                os.mkdir(f'static/{name}')
+                os.mkdir(f'nbaImages/{name}/')
 
-                urllib.request.urlretrieve(url, f'static/{name}/{name}.svg')
-                f = open(os.path.join(settings.BASE_DIR, f'static/{name}/{name}.svg'), 'rb')
+                urllib.request.urlretrieve(url, f'nbaImages/{name}//{name}.svg')
+                f = open(os.path.join(settings.BASE_DIR, f'nbaImages/{name}//{name}.svg'), 'rb')
 
                 team = Team.objects.create(
                     name=name,
@@ -213,9 +218,9 @@ class Player(models.Model):
 
                 try:
                     player_path = variable.back_number + " " + variable.first_name + " " + variable.last_name
-                    urllib.request.urlretrieve(player_img_src, f'static/{Teams[index].name}/{player_path}.png')
+                    urllib.request.urlretrieve(player_img_src, f'nbaImages/{name}//{player_path}.png')
 
-                    f = open(os.path.join(settings.BASE_DIR, f'static/{Teams[index].name}/{player_path}.png'), 'rb')
+                    f = open(os.path.join(settings.ROOT_DIR, f'nbaImages/{name}//{player_path}.png'), 'rb')
                     obj = Player.objects.get(name=f'{variable.name}')
                     # player_path, is_boolean = Player.objects.get_or_create(
                     # MPG 를 pycharm 에서 playin_time으로 작성함
