@@ -9,6 +9,7 @@ import datetime
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
+
 def team_path(instance, filename):
     a = f'{instance.name}/{instance.name}.svg'
     return a
@@ -56,7 +57,11 @@ class Team(models.Model):
         team_img_urls = driver.find_elements_by_xpath("//div/div/div[@class='team__list']/img")
         team_img_url = [url.get_attribute("src") for url in team_img_urls]
 
-        os.mkdir(f'nbaImages')
+        try:
+            os.mkdir(f'nbaImages')
+        except FileExistsError:
+            pass
+
         for url, name in zip(team_img_url, team_name):
 
             try:
@@ -136,7 +141,8 @@ class Player(models.Model):
         ### 각 팀별 url 페이지
         team_url_list = driver.find_elements_by_xpath("//div/div/div[@class='team__list']/a")
         detail_urls = [url.get_attribute("href") for url in team_url_list]
-
+        # 팀 이름
+        name = [url.get_attribute("innerText") for url in team_url_list]
         try:
             Teams = Team.objects.get(pk=1)
             Teams = Team.objects.all()
@@ -174,7 +180,7 @@ class Player(models.Model):
                 tr_data = season_stat_tbody[0].find_elements_by_tag_name('tr')
                 tr_data[0].find_elements_by_tag_name('td')
 
-                #career stats
+                # career stats
                 player_stats = [url.get_attribute("innerText") for url in
                                 tr_data[1].find_elements_by_tag_name('td')]
                 # NamedTuple
@@ -218,13 +224,14 @@ class Player(models.Model):
 
                 try:
                     player_path = variable.back_number + " " + variable.first_name + " " + variable.last_name
-                    urllib.request.urlretrieve(player_img_src, f'nbaImages/{name}//{player_path}.png')
+                    urllib.request.urlretrieve(player_img_src, f'nbaImages/{Teams[index].name}/{player_path}.png')
 
-                    f = open(os.path.join(settings.ROOT_DIR, f'nbaImages/{name}//{player_path}.png'), 'rb')
+                    f = open(os.path.join(settings.ROOT_DIR, f'app/nbaImages/{Teams[index].name}/{player_path}.png'), 'rb')
                     obj = Player.objects.get(name=f'{variable.name}')
                     # player_path, is_boolean = Player.objects.get_or_create(
                     # MPG 를 pycharm 에서 playin_time으로 작성함
                 except Player.DoesNotExist:
+
                     obj = Player.objects.create(
                         name=variable.name,
                         team=Teams[index],
@@ -248,15 +255,19 @@ class Player(models.Model):
                         hometown=variable.hometown,
                         nba_debut=variable.nba_debut,
                         image=File(f),
+
                     )
                     f.close()
                     print(player_path, " Created ===========", Teams[index])
+                # except FileNotFoundError:
+                #     print('FileNotFoundError')
+                #     pass
                 except FileExistsError:
                     print("already exists ", player_path)
                     pass
-                except IndexError:
-                    print(player_path, "인덱스 에러 발생")
-                    pass
+                # except IndexError:
+                #     print(player_path, "인덱스 에러 발생")
+                #     pass
 
     def call_by_crawler(player_model, requset, queryset):
         Player.crawler()

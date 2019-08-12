@@ -86,7 +86,8 @@ def tag_post_list(request, tag_name):
     # context 에 담아서 리턴 render
     # HTML: /posts/tag_post_list.html
 
-    posts = Post.objects.filter(comments__tags__name=tag_name).distinct()
+    posts = Post.objects.filter(postTags__name=tag_name).distinct() | Post.objects.filter(
+        comments__tags__name=tag_name).distinct()
     context = {
         'posts': posts,
     }
@@ -118,4 +119,3 @@ def post_like_toggle(request, post_pk):
         post.like_toggle(request.user)
         url = reverse('posts:post-list')
         return redirect(url + f'#post-{post_pk}')
-

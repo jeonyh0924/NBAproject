@@ -23,10 +23,8 @@ secrets = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
 # Django secret key
 SECRET_KEY = secrets['SECRET_KEY']
 
-
 FACEBOOK_APP_ID = secrets['FACEBOOK_APP_ID']
 FACEBOOK_APP_SECRET = secrets['FACEBOOK_APP_SECRET']
-
 
 STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
 STATIC_URL = '/static/'
@@ -72,7 +70,6 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
     'members.apps.MembersConfig',
-
     'news',
 
     'django.contrib.admin',

@@ -535,7 +535,7 @@ DATABASES = {
 ```
 
 ## 에러 상황
-- export config/settings/dev 에서 ./manage.py migrate상황 시, psycopg2에 대한 모듈 에러가 발생한다면 이것은 Django에서 postgresql을 사용할 수 있도록 도와주는 라이브러리이다. 
+- export config/settings/dev 에서 ./manage.py 상황 시, psycopg2에 대한 모듈 에러가 발생한다면 이것은 Django에서 postgresql을 사용할 수 있도록 도와주는 라이브러리이다. 
 ```pip install psycopg2-binary``` 를 쉘에서 실행하면 된다. 
 
 - ```could not connect to server timed out```은 EC2 보안그룹에서 아까 생성 하였던, RDS Security Group을 클릭 한 뒤 인바운드 편집에서 ```편집 ->``` 유형은 postgre 포트 5432 소스는 원하는 상황으로 한 뒤 다시 app에서 ./maange.py migrate하면 된다. 

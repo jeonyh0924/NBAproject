@@ -27,3 +27,25 @@ class newsHeadlines(models.Model):
         # news_title_list_name = driver.find_elements_by_xpath(
         #     '//*[@id="main-container"]/div/section[3]/div[1]/section/ul/li/a')
         # [url.get_attribute("href") for url in news_title_list_name]
+
+
+class Person(models.Model):
+    name = models.CharField(max_length=128)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=128)
+    members = models.ManyToManyField(Person, through='Membership')
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.name
+
+
+class Membership(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    date_joined = models.DateField()
+    invite_reason = models.CharField(max_length=64)

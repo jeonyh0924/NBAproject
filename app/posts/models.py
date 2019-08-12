@@ -48,8 +48,8 @@ class Post(models.Model):
             # DB에 Comment
             # 자신의 'tag' 값에서 해시태그 목록을 가져와서
             # 자신의 'postTags'속성 (MTM 필드)에 해당
-            tags = [HashTags.objects.get_or_create(name=name)[0] for name in re.findall(self.TAG_PATTERN, self.tag)]
-            self.postTags.set(tags)
+            postTags = [HashTags.objects.get_or_create(name=name)[0] for name in re.findall(self.TAG_PATTERN, self.tag)]
+            self.postTags.set(postTags)
 
         save_html()
         super().save(*args, **kwargs)
@@ -156,20 +156,6 @@ class HashTags(models.Model):
 
     class Meta:
         verbose_name = '해시태그'
-        verbose_name_plural = f'{verbose_name} 목록'
-
-
-class SignatureTeam(models.Model):
-    user = models.OneToOneField(User, blank=True, null=True, on_delete=models.CASCADE)
-    player = models.ManyToManyField(Player, blank=True, null=True)
-
-    def add_player(self, player):
-        if self.player.count() >= 6:
-            raise Exception("Too many players on this User")
-        self.player.add(player)
-
-    class Meta:
-        verbose_name = '유저 지정 팀'
         verbose_name_plural = f'{verbose_name} 목록'
 
 

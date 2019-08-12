@@ -12,7 +12,6 @@ class User(AbstractUser):
         blank=True
     )
     introduce = models.TextField(max_length=300, blank=True, null=True)
-    player = models.ManyToManyField(Player, blank=True, null=True)
 
     def __str__(self):
         return self.username
