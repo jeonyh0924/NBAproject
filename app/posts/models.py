@@ -91,6 +91,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         verbose_name='포스트',
         related_name='comments',
+        related_query_name='commented',
     )
     author = models.ForeignKey(
         User,
@@ -100,6 +101,8 @@ class Comment(models.Model):
     tags = models.ManyToManyField(
         'HashTags',
         blank=True,
+        related_name='comment_set',
+        related_query_name='comments',
     )
     # 글쓴이
     created_at = models.DateTimeField(verbose_name='작성 날', auto_now_add=True, )

@@ -15,7 +15,11 @@ DATABASES = dev_secrets['DATABASES']
 # django -storages
 # ~/.aws/credentials
 DEFAULT_FILE_STORAGE = 'config.storages.MediaStorage'
+AWS_ACCESS_KEY_ID = dev_secrets['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = dev_secrets['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = dev_secrets['AWS_STORAGE_BUCKET_NAME']
 AWS_DEFAULT_ACL = None
+
 # collectstatic 을 실행 했을 때,
 # 버킷의 'static'폴더 아래에 정적 파일들이 저장되도록 설정해보기
 # config.storages.StaticStorage 클래스 만들어서 적용
