@@ -90,8 +90,8 @@ class Comment(models.Model):
         Post,
         on_delete=models.CASCADE,
         verbose_name='포스트',
-        related_name='comment_set',
-        related_query_name='comments',
+        related_name='comments',
+        # related_query_name='comments',
     )
     author = models.ForeignKey(
         User,
