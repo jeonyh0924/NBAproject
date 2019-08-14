@@ -38,7 +38,3 @@ except requests.exceptions.RequestException:
     pass
 
 WSGI_APPLICATION = 'config.wsgi.production.application'
-
-# Health Check 도메인을 허용하는 코드
-
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static')

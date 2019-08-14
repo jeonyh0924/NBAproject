@@ -1,27 +1,23 @@
-FROM        jeonyh0924/deploy-nba730:base
-ENV             DJANGO_SETTINGS_MODULE  config.settings.production
-ENV             CHROMEDRIVER_VERSION 2.19
+FROM        jeonyh0924/deploy-nba814:base
+# 전체 파일 복사
+COPY        ./  /srv/project
 
-# Image의 /srv/project/폴더 내부에 복사
-COPY            ./  /srv/projects
-WORKDIR         /srv/projects
+# 명령을 실행할 디렉토리 지정
+WORKDIR     /srv/project/app
 
-# 프로세스 실행할 명령
-WORKDIR         /srv/projects/app
 RUN             python3 manage.py collectstatic --noinput
 
-# Nginx
-# 기존 존재하던 Nginx설정파일 삭제
-RUN             rm -rf /etc/nginx/sites-available/* && \
-                rm -rf /etc/nginx/sites-enabled/* && \
-                cp -f  /srv/projects/.config/app.nginx \
-                       /etc/nginx/sites-available/ && \
-                ln -sf /etc/nginx/sites-available/app.nginx \
-                       /etc/nginx/sites-enabled/app.nginx
+# 기존 Nginx 파일 삭제 및 새 Nginx 파일 복사
+RUN         rm -rf /etc/nginx/sites-available/* && \
+            rm -rf /etc/nginx/sites-enabled/* && \
+            cp -f  /srv/project/.config/app.nginx \
+                   /etc/nginx/sites-available/ && \
+            ln -sf /etc/nginx/sites-available/app.nginx \
+                   /etc/nginx/sites-enabled/app.nginx
 
-# supervisor 설정파일 복사
-RUN             cp -f  /srv/projects/.config/supervisord.conf \
-                       /etc/supervisor/conf.d/
+# supervisor 파일 복사
+RUN         cp -f /srv/project/.config/supervisord.conf \
+                  /etc/supervisor/conf.d/
 
 EXPOSE          80
 

@@ -1,33 +1,20 @@
-server {
-    return 404;
-}
-# /etc/nginx/sites-available/
-server {
+server{
     listen 80;
-    listen 443;
-
-    server_name localhost *.elb.amazonaws.com .amazonaws.com;
-
+    server_name localhost lab-factory.org www.lab-factory.org api.lab-factory.org;
     charset utf-8;
     client_max_body_size 128M;
 
-    # ('/'부터 시작) -> 모든 URL연결에 대해
     location / {
-        # uwsgi와의 연결에 unix소켓 사용
-        # "/tmp/app.sock"파일을 사용
-        uwsgi_pass  unix:///tmp/app.sock;
-        include     uwsgi_params;
+        include proxy_params;
+        proxy_pass http://unix:/tmp/gunicorn.sock;
     }
 
     location /static/ {
-        alias /srv/projects/.static/;
-    }
-    location /media/ {
-        alias /srv/projects/.media/;
+        alias /srv/project/.static/;
+
     }
 
-    # https 리다이렉트
-    if ($http_x_forwarded_proto = 'http') {
-        return 301 https://$host$request_uri;
+    location /media/ {
+        alias /srv/project/.media/;
     }
 }
