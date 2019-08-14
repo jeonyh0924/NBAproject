@@ -587,3 +587,28 @@ SocialApp matching query does not exist.
 
 ![ERD](/assets/SocialApp/SocialApp.png)
 이 발생한다면 디비를 엎은 후, admin에 설정이 없기 때문 다시 가서 클라이언트 아이디와 패스워드를 받아온다. 
+
+
+## search 기능 구현
+```python
+def tag_post_list(request, tag_name):
+    # Post중, 자신에게 속한 Comment가 가진 HashTag 목록 중 tag_name 이 name인 HashTag가 포함 된
+    # Post 목록을 posts 변수에 할당
+    # context 에 담아서 리턴 render
+    # HTML: /posts/tag_post_list.html
+
+    posts = Post.objects.filter(comments__tags__name=tag_name).distinct() | \
+            Post.objects.filter(postTags__name=tag_name).distinct()
+    context = {
+        'posts': posts,
+    }
+    return render(request, 'posts/tag_post_list.html', context)
+
+```
+> post 페이지에서 검색한 값이 해시태그로 작성된 댓글이면 검색이 가능하도록 해주는 것이 기존의 서비스였다.
+> 
+> 댓글의 해시태그 뿐 아닌, 게시글에 존재하는 태그도 검색이 가능하도록 하는것을 원하였다. 
+> 
+> **Post.objects.filter(comments__tags__name=tag_name or postTags__name=tag_name).distinct()**
+> 
+> 이 가능할 것 이라고 생각하였지만 **or**은 문법상의 오류로 인식, 기능 구현이 되지 않았다 **|** or 의 표현식을 통해 가능하였다. 
