@@ -8,8 +8,9 @@ DEBUG = True
 # 아마존에서 제공해주는 URL에 접속을 허용하는 코드
 ALLOWED_HOSTS = production_secrets['ALLOWED_HOSTS']
 
-# postgre
+# postgreSQL - RDS
 DATABASES = production_secrets['DATABASES']
+
 # SQlite3
 # DATABASES = {
 #     'default': {

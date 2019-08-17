@@ -1,11 +1,18 @@
+server {
+    return 404;
+}
 server{
     listen 80;
-    server_name localhost lab-factory.org www.lab-factory.org api.lab-factory.org;
+    server_name localhost *.amazonaws.com;
     charset utf-8;
     client_max_body_size 128M;
 
     location / {
         include proxy_params;
+        proxy_connect_timeout 300;
+        proxy_send_timeout 300;
+        proxy_read_timeout 300;
+        send_timeout 300;
         proxy_pass http://unix:/tmp/gunicorn.sock;
     }
 

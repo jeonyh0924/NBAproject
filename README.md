@@ -556,7 +556,7 @@ DATABASES = dev_secrets['DATABASES']
     "default": {
       "ENGINE": "django.db.backends.postgresql",
       	 "HOST": "<RDS에 생성 된 엔드포인트>", 
-        "NAME": "<RDS 설정 시 데이터베이스 이름>",
+        "NAME": "<RDS 설정 시 초기 데이터베이스 이름>",
         "USER": "<RDS 설정 시 master username>",
         "PASSWORD": "<RDS 설정 시 암호>",
       "PORT": 5432
@@ -612,3 +612,21 @@ def tag_post_list(request, tag_name):
 > **Post.objects.filter(comments__tags__name=tag_name or postTags__name=tag_name).distinct()**
 > 
 > 이 가능할 것 이라고 생각하였지만 **or**은 문법상의 오류로 인식, 기능 구현이 되지 않았다 **|** or 의 표현식을 통해 가능하였다. 
+
+
+## nginx 504 Gateway Time-out 에러 발생 시 대처 방법
+
+>DB를 sqlite를 사용하는 상황에서 배포와 로컬에서 작동은 이상이 없었지만, docker run의 상황속에서 504 에러가 발생하였다.
+>
+>구글링을 통해 해결한 방법은 [해당링크](https://jootc.com/p/201806101238)를 통해 해결 하였다.
+
+
+
+ ```python
+location / {
+    proxy_connect_timeout 300;
+    proxy_send_timeout 300;
+    proxy_read_timeout 300;
+    send_timeout 300;
+}```
+
