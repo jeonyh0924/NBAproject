@@ -630,3 +630,57 @@ location / {
     send_timeout 300;
 }```
 
+
+
+## redirect와 render
+
+render 와 redirect 구분
+>render는 템플릿을 불러오고, redirect는 URL로 이동 
+>
+>URL로 이동한다는 건 그 URL에 맞는 views가 다시 실행 여기서 render를 할지 다시 redirect할지 결정. 이 점에 유의
+
+
+## detail 분류
+urls -> views -> templates
+
+- template ( list.html )
+
+```python
+<tbody>
+            {% for team in teams %}
+                <tr>
+                    <th scope="row">
+                        <a href="{% url 'members:team-detail' team_id=team.pk %}">{{team.name}}</a>
+                    </th>
+                    <td><img src="{{ team.team_image.url }}" style="width: 130px; height: 130px; border-radius: 100%;">
+                    </td>
+                </tr>
+            {% endfor %}
+</tbody>
+```
+
+- urls 에서 
+
+```python
+
+app_name = 'members'
+
+urlpatterns = [
+    path('', views.team_list, name='team-list'),
+    path('<int:team_id>/', views.detail, name='team-detail'),
+]
+```
+
+- views
+
+```python
+def detail(request, team_id):
+    team = Team.objects.get(pk=team_id)
+    players = Team.player_set.all()
+    context = {
+        'team': team,
+        'players': players,
+    }
+    return render(request, 'members/team_detail.html', context)
+
+```

@@ -9,7 +9,6 @@ RUN        apt-get -y -qq dist-upgrade
 RUN        apt-get -y install supervisor nginx && \
            pip install gunicorn
 
-
 # requirements.txt파일만 복사 후, 패키지 설치
 # requirements.txt파일의 내용이 바뀌지 않으면 pip3 install ..부분이 재실행되지 않음
 COPY            requirements-production.txt    /tmp/requirements.txt

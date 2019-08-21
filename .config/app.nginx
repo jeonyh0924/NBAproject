@@ -1,9 +1,9 @@
-server {
-    return 404;
-}
+#server {
+#    return 404;
+#}
 server{
     listen 80;
-    server_name localhost *.amazonaws.com;
+    server_name 127.0.0.1 localhost *.amazonaws.com;
     charset utf-8;
     client_max_body_size 128M;
 
