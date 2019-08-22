@@ -10,12 +10,26 @@ from .forms import PostCreateForm, CommentForm, PostForm
 
 # Create your views here.
 def post_list(request):
+    # posts = Post.objects.all()
+    # context = {
+    #     'posts': posts,
+    #     'comment_form': CommentForm(),
+    # }
+    # return render(request, 'posts/post_list.html', context)
     posts = Post.objects.all()
     context = {
         'posts': posts,
+    }
+    return render(request, 'posts/post_base.html', context)
+
+
+def post_detail(request, post_pk):
+    post = Post.objects.get(pk=post_pk)
+    context = {
+        'post': post,
         'comment_form': CommentForm(),
     }
-    return render(request, 'posts/post_list.html', context)
+    return render(request, 'posts/post_detail.html', context)
 
 
 @login_required
@@ -69,7 +83,7 @@ def comment_create(request, post_pk):
             comment.post = post
             comment.save()
 
-            return redirect('posts:post-list')
+            return redirect('posts:post-detail', post_pk)
         # posts.forms.CommentCreateForm()을 사용
         # HTML 에서는 사용을 하지 않음
 

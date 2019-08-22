@@ -232,7 +232,7 @@ class Player(models.Model):
                     # MPG 를 pycharm 에서 playin_time으로 작성함
                 except Player.DoesNotExist:
 
-                    obj = Player.objects.create(
+                    obj, is_boolean = Player.objects.get_or_create(
                         name=variable.name,
                         team=Teams[index],
 

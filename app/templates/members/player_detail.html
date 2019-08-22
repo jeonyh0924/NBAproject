@@ -7,12 +7,6 @@
     <div class="row " id="team.name">
         <div class="col-sm-2">
             <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">img</th>
-                    <th scope="col">name</th>
-                </tr>
-                </thead>
                 <tbody>
                 {% for team in teams %}
                 <tr>
@@ -30,13 +24,28 @@
                 </tbody>
             </table>
         </div>
-        <div class="card" style="width: 18rem;">
-          <img src="{{player.image.url}}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{player.name}}</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
+        <div class="card" style="max-height: 800px; margin-left: 100px">
+            <img src="{{player.image.url}}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title font-weight-bold">{{player.name}}</h5>
+                <h5 class="card-title">등번호 : {{player.back_number}}</h5>
+                <h5 class="card-title">포지션 : {{player.position}}</h5>
+
+                <p class="card-text">야투율 : {{player.FGP}}%</p>
+                <p class="card-text">3점 야투율 : {{player.T3PP}}%</p>
+                <p class="card-text">자유투 성공률 : {{player.FTP}}%</p>
+                <p class="card-text">평균 득점 : {{player.PPG}}점</p>
+                <p class="card-text">평균 어시스트 : {{player.APG}}</p>
+                <p class="card-text">평균 리바운드 : {{player.RPG}}</p>
+                <p class="card-text">평균 블락 : {{player.BPG}}%</p>
+
+                <p class="card-text font-weight-bold">키 : {{player.height}}</p>
+                <p class="card-text font-weight-bold">무게 : {{player.weight}}</p>
+                {% if user.is_authenticated %}
+                <a href="#" class="btn btn-primary">내 팀에 추가</a>
+                {% endif %}
+            </div>
+
         </div>
 
     </div>

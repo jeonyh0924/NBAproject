@@ -9,15 +9,15 @@ DEBUG = True
 ALLOWED_HOSTS = production_secrets['ALLOWED_HOSTS']
 
 # postgreSQL - RDS
-DATABASES = production_secrets['DATABASES']
+# DATABASES = production_secrets['DATABASES']
 
 # SQlite3
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+    }
+}
 
 # s3 버전 및 지역 설정
 AWS_S3_SIGNATURE_VERSION = 's3v4'

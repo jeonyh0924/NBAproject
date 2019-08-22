@@ -7,12 +7,6 @@
     <div class="row " id="team.name">
         <div class="col-sm-2">
             <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">img</th>
-                    <th scope="col">name</th>
-                </tr>
-                </thead>
                 <tbody>
                 {% for team in teams %}
                 <tr>
@@ -35,12 +29,14 @@
 
         <div class="col-sm-10">
 
-            <div class="card-group">
+            <div class="card-deck" style="margin-left: 10px">
             {% for player in players %}
-                <div class="card">
+                <div class="card mb-3 tab-pane fade show active" role="tabpanel" style="min-width: 16rem;">
+                    <a href="{% url 'members:player-detail' player_id=player.pk %}">
                     <img src="{{ player.image.url }}" class="card-img-top" alt="...">
+                    </a>
                     <div class="card-body">
-                        <a href="{% url 'members:player-detail' player_id=player.pk %}">
+                        <a href="{% url 'members:player-detail' player_id=player.pk %}" style="color: black">
                         {{player.name}}</a>
                     </div>
                 </div>

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div>
+    <!--{% for post in posts %}-->
+    <!--<div id="post-{{post.pk}}" class="col col-lg-10 offset-lg-1">-->
+    <!--<div class="card">-->
+    <!--<div class="card-header">-->
+    <!--<a href="{% url 'posts:post-detail' post_pk=post.pk %}">{{post.title}}</a>-->
+
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--{% endfor %}-->
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">게시글 번호</th>
+            <th scope="col">작성자</th>
+            <th scope="col">작성자 이미지</th>
+            <th scope="col">제목</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">댓글 수</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+        <tr>
+            <th scope="row">
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}" style="color: black">{{post.pk}}</a>
+            </th>
+            <td>{{post.user}}</td>
+            <td>
+                <img src="{{ post.user.img_profile_url }}" style="width: 30px; height: 30px; border-radius: 100%;">
+            </td>
+            <td colspan="5">
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}" style="color: black">{{post.title}}</a>
+            </td>
+            <td>
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}" style="color: black">{{post.comment_set.count}}</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
