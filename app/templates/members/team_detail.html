@@ -2,8 +2,13 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container text-center ">
+    <img class="center-block mx-auto" src="{{ team.team_image.url }}" style="width: 150px; height: 150px; border-radius: 100%;">
+    <div class="font-weight-bold mb-3" >{{team.name}}</div>
+</div>
 
+<div class="container">
+<!-- NBA 팀 리스트 레이아웃 -->
     <div class="row " id="team.name">
         <div class="col-sm-2">
             <table class="table">
@@ -11,14 +16,14 @@
                 {% for team in teams %}
                 <tr>
                     <th>
-                        <img src="{{ team.team_image.url }}" style="width: 50px; height: 50px; border-radius: 100%;">
-                    </th>
-
-                    <td scope="row">
                         <a href="{% url 'members:team-detail' team_id=team.pk %}">
+                        <img src="{{ team.team_image.url }}" style="width: 50px; height: 50px; border-radius: 100%;">
+                        </a>
+                    </th>
+                    <td scope="row">
+                        <a href="{% url 'members:team-detail' team_id=team.pk %}" style="color: black">
                         {{team.name}}</a>
                     </td>
-
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -26,12 +31,12 @@
         </div>
 
 
-
-        <div class="col-sm-10">
+<!-- 선수들 레이아웃 -->
+        <div class="col-sm-9 ml-5">
 
             <div class="card-deck" style="margin-left: 10px">
             {% for player in players %}
-                <div class="card mb-3 tab-pane fade show active" role="tabpanel" style="min-width: 16rem;">
+                <div class="card mb-3" style="min-width: 15rem; max-width: 15rem;">
                     <a href="{% url 'members:player-detail' player_id=player.pk %}">
                     <img src="{{ player.image.url }}" class="card-img-top" alt="...">
                     </a>
@@ -48,4 +53,5 @@
     </div>
 
 </div>
+
 {% endblock %}
