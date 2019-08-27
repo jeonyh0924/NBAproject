@@ -91,15 +91,10 @@ class Player(models.Model):
         on_delete=models.CASCADE,
     )
 
-    challenge = models.ForeignKey(
-        'Challenge',
-        on_delete=models.CASCADE,
-        null=True,
-    )
-
     playeroption = models.ManyToManyField(
         'PlayerOption',
         null=True,
+        blank=True,
         related_name='playeroption_set',
         related_query_name='playeroptions',
     )
@@ -288,20 +283,47 @@ class Player(models.Model):
     call_by_crawler.short_description = "선수 버튼 실행"
 
 
-class Challenge(models.Model):
-    user = models.ForeignKey(
-        'users.User',
-        on_delete=models.CASCADE,
-        null=True,
-    )
-
-
 class PlayerOption(models.Model):
-    value = (
+    VALUES = (
         ('1', '1 Dollars'),
         ('2', '2 Dollars'),
         ('3', '3 Dollars'),
         ('4', '4 Dollars'),
         ('5', '5 Dollars'),
     )
-    version = models.CharField(max_length=5)
+    value = models.CharField(max_length=1, choices=VALUES)
+
+    @staticmethod
+    def make_dollars():
+        index_list = ['1', '2', '3', '4', '5']
+        for i in range(5):
+            PlayerOption.objects.create(value=index_list[i])
+
+
+class Roster(models.Model):
+    name = models.CharField(max_length=128)
+    player = models.ManyToManyField(
+        Player,
+        through='PlayerRoster',
+        null=True,
+        related_name='player_set',
+        related_query_name='players'
+    )
+
+
+class PlayerRoster(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE, )
+    roster = models.ForeignKey(Roster, on_delete=models.CASCADE, )
+    create_date = models.DateTimeField('생성 날짜', auto_now_add=True)
+    update_date = models.DateTimeField('수정 날짜', auto_now=True)
+
+
+'''
+선수와 챌린지는 다대 다 관계이다. 한 선수는 여러 챌린지에 들어갈 수 있으며, 챌린지는 여러 선수를 포함할 수 있다.
+
+로스터는 유저와 다대 일 관계이다. 유저는 여러 로스터를 가질 수 있다. 
+
+15 dollars challenge 목록은 따로 리스트로 하드코딩하여 추가한다.
+
+이후에 유저들이 15dollars challenge 를 만들 수 있도록 해보자 !
+'''

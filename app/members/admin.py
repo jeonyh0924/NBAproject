@@ -2,6 +2,38 @@ from django.contrib import admin
 from .models import *
 
 
+@admin.register(Roster)
+class RosterAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+    fieldsets = (
+        ('선수', {
+            'fields': (
+                # 'player',
+            )
+        }),
+    )
+
+@admin.register(PlayerOption)
+class PlayerOptionAdmin(admin.ModelAdmin):
+    list_display = ['value', ]
+
+    def make_option(self, request, query):
+        PlayerOption.make_dollars()
+
+    actions = [make_option]
+
+    make_option.short_description = "달러 생성"
+
+    fieldsets = (
+        ('values', {
+            'fields': (
+                'value',
+            )
+        }),
+    )
+
+
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
@@ -30,7 +62,7 @@ class PlayerAdmin(admin.ModelAdmin):
 
     make_objects.short_description = "선수 크롤러 실행"
 
-    list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team']
+    list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team', ]
     list_per_page = 15
     list_filter = ['team', 'position']
     ordering = ['-pk', ]
@@ -38,6 +70,9 @@ class PlayerAdmin(admin.ModelAdmin):
     search_fields = ['team__name', 'back_number', 'name']
 
     fieldsets = (
+        ('챌린지', {
+            'fields': ('challenge', 'playeroption')
+        }),
         ('소속 팀', {
             'fields': ('team',)
         }),
@@ -53,4 +88,3 @@ class PlayerAdmin(admin.ModelAdmin):
             )
         })
     )
-
