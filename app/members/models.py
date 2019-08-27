@@ -91,6 +91,18 @@ class Player(models.Model):
         on_delete=models.CASCADE,
     )
 
+    challenge = models.ForeignKey(
+        'Challenge',
+        on_delete=models.CASCADE,
+        null=True,
+    )
+
+    playeroption = models.ManyToManyField(
+        'PlayerOption',
+        null=True,
+        related_name='playeroption_set',
+        related_query_name='playeroptions',
+    )
     # 선수 스탯
     playin_time = models.CharField(verbose_name='출장 시간', max_length=100)
     FGP = models.CharField(verbose_name='야투 성공률', max_length=50)
@@ -226,7 +238,8 @@ class Player(models.Model):
                     player_path = variable.back_number + " " + variable.first_name + " " + variable.last_name
                     urllib.request.urlretrieve(player_img_src, f'nbaImages/{Teams[index].name}/{player_path}.png')
 
-                    f = open(os.path.join(settings.ROOT_DIR, f'app/nbaImages/{Teams[index].name}/{player_path}.png'), 'rb')
+                    f = open(os.path.join(settings.ROOT_DIR, f'app/nbaImages/{Teams[index].name}/{player_path}.png'),
+                             'rb')
                     obj = Player.objects.get(name=f'{variable.name}')
                     # player_path, is_boolean = Player.objects.get_or_create(
                     # MPG 를 pycharm 에서 playin_time으로 작성함
@@ -273,3 +286,22 @@ class Player(models.Model):
         Player.crawler()
 
     call_by_crawler.short_description = "선수 버튼 실행"
+
+
+class Challenge(models.Model):
+    user = models.ForeignKey(
+        'users.User',
+        on_delete=models.CASCADE,
+        null=True,
+    )
+
+
+class PlayerOption(models.Model):
+    value = (
+        ('1', '1 Dollars'),
+        ('2', '2 Dollars'),
+        ('3', '3 Dollars'),
+        ('4', '4 Dollars'),
+        ('5', '5 Dollars'),
+    )
+    version = models.CharField(max_length=5)

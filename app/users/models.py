@@ -33,3 +33,4 @@ class User(AbstractUser):
         postlike, postlike_created = self.postlike_set.get_or_create(post=post)
         if not postlike_created:
             postlike.delete()
+
