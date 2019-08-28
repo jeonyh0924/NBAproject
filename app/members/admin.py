@@ -31,7 +31,7 @@ class RosterAdmin(admin.ModelAdmin):
 
 @admin.register(PlayerOption)
 class PlayerOptionAdmin(admin.ModelAdmin):
-    list_display = ['value', ]
+    list_display = ['value', 'type']
 
     def make_option(self, request, query):
         PlayerOption.make_dollars()
@@ -43,7 +43,7 @@ class PlayerOptionAdmin(admin.ModelAdmin):
     fieldsets = (
         ('values', {
             'fields': (
-                'value',
+                'value', 'type',
             )
         }),
     )
@@ -75,12 +75,7 @@ class PlayerAdmin(admin.ModelAdmin):
     def make_objects(ModelAdmin, request, queryset):
         Player.crawler()
 
-    def matching_option(ModelAdmin, request, queryset):
-        Player.matching_option()
-
     make_objects.short_description = "선수 크롤러 실행"
-
-    matching_option.sh
 
     list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team', ]
     list_per_page = 15

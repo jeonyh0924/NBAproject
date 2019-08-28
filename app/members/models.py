@@ -277,6 +277,7 @@ class Player(models.Model):
                 #     print(player_path, "인덱스 에러 발생")
                 #     pass
 
+    #   챌린지 기본 세팅 함수 만들기
     @staticmethod
     def matching_option():
         o_list = PlayerOption.objects.all()
@@ -284,14 +285,22 @@ class Player(models.Model):
         for i in range(25):
             p_list[i].playeroption.set(o_list[i % 5].value)
 
+    @staticmethod
+    def make_list():
+        index = 0
+        player_all = Player.objects.all()
+        playerOption_all = PlayerOption.objects.all()
+        for i in range(5):
+            for j in range(5):
+                player_all[index].playeroption.set(playerOption_all[i].value)
+                index += 1
+                if index == 25:
+                    break
+
     def call_by_crawler(player_model, requset, queryset):
         Player.crawler()
 
-    def call_by_option(self, request, queryset):
-        Player.matching_option()
-
     call_by_crawler.short_description = "선수 버튼 실행"
-    call_by_option.short_descriptiion = "옵션 실행"
 
 
 class PlayerOption(models.Model):
@@ -303,12 +312,13 @@ class PlayerOption(models.Model):
         ('5', '5 Dollars'),
     )
     value = models.CharField(max_length=1, choices=VALUES)
+    type = models.CharField(max_length=10)
 
     @staticmethod
     def make_dollars():
         index_list = ['1', '2', '3', '4', '5']
         for i in range(5):
-            PlayerOption.objects.create(value=index_list[i])
+            PlayerOption.objects.create(value=index_list[i], type='test', )
 
 
 class Roster(models.Model):
@@ -342,7 +352,7 @@ class Roster(models.Model):
 
 이후에 유저들이 15dollars challenge 를 만들 수 있도록 해보자 !
 
-# 1. 선수 목록 pk 1 ~ 25 까지 강제 설정
+# 1. 선수 목록 pk 1 ~ 25 까지 강제 설정 ##
 
 # 2. html 페이지 만들기 
 

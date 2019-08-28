@@ -17,7 +17,7 @@ class Post(models.Model):
     content = models.TextField(verbose_name='작성 글', max_length=500)
     tag = models.TextField(verbose_name='태그', max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(verbose_name='생성 날짜', auto_now_add=True, )
-    # auto now add 는 객체가 save 될 때 마다 호
+    # auto now add 는 객체가 save 될 때 마다    호
     updated_at = models.DateTimeField(verbose_name='수정 날짜', auto_now=True, null=True, blank=True)
     image = models.ImageField(upload_to='post', verbose_name='업로드 이미지', blank=True, null=True, default=True)
     postTags = models.ManyToManyField('HashTags', blank=True, )

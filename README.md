@@ -684,3 +684,19 @@ def detail(request, team_id):
     return render(request, 'members/team_detail.html', context)
 
 ```
+
+
+## template 로 반복분 zip 보내기
+```python
+## view
+mylist = zip(list1, list2)
+context = {
+            'mylist': mylist,
+        }
+return render(request, 'template.html', context)
+
+
+## template
+{% for item1, item2 in mylist %}
+
+```
