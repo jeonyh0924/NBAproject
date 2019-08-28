@@ -277,10 +277,21 @@ class Player(models.Model):
                 #     print(player_path, "인덱스 에러 발생")
                 #     pass
 
+    @staticmethod
+    def matching_option():
+        o_list = PlayerOption.objects.all()
+        p_list = Player.objects.all()
+        for i in range(25):
+            p_list[i].playeroption.set(o_list[i % 5].value)
+
     def call_by_crawler(player_model, requset, queryset):
         Player.crawler()
 
+    def call_by_option(self, request, queryset):
+        Player.matching_option()
+
     call_by_crawler.short_description = "선수 버튼 실행"
+    call_by_option.short_descriptiion = "옵션 실행"
 
 
 class PlayerOption(models.Model):
@@ -304,26 +315,36 @@ class Roster(models.Model):
     name = models.CharField(max_length=128)
     player = models.ManyToManyField(
         Player,
-        through='PlayerRoster',
+        # through='PlayerRoster',
         null=True,
         related_name='player_set',
         related_query_name='players'
     )
 
 
-class PlayerRoster(models.Model):
-    player = models.ForeignKey(Player, on_delete=models.CASCADE, )
-    roster = models.ForeignKey(Roster, on_delete=models.CASCADE, )
-    create_date = models.DateTimeField('생성 날짜', auto_now_add=True)
-    update_date = models.DateTimeField('수정 날짜', auto_now=True)
+#
+# class PlayerRoster(models.Model):
+#     player = models.ForeignKey(Player, on_delete=models.CASCADE, )
+#     roster = models.ForeignKey(Roster, on_delete=models.CASCADE, )
+#     create_date = models.DateTimeField('생성 날짜', auto_now_add=True)
+#     update_date = models.DateTimeField('수정 날짜', auto_now=True)
 
 
 '''
 선수와 챌린지는 다대 다 관계이다. 한 선수는 여러 챌린지에 들어갈 수 있으며, 챌린지는 여러 선수를 포함할 수 있다.
 
-로스터는 유저와 다대 일 관계이다. 유저는 여러 로스터를 가질 수 있다. 
+로스터는 유저와 다대 일 관계이다. 유저는 여러 로스터를 가질 수 있다.
+
+선수와 로스터의 다대 다 관계는 PlayerRoster 를 통해 구현한다. -->> through 를 통해 다대 다 테이블을 정의하려 하였으나
+관리자 부분에서 따로 생성이 되지 않았다.   
 
 15 dollars challenge 목록은 따로 리스트로 하드코딩하여 추가한다.
 
 이후에 유저들이 15dollars challenge 를 만들 수 있도록 해보자 !
+
+# 1. 선수 목록 pk 1 ~ 25 까지 강제 설정
+
+# 2. html 페이지 만들기 
+
+# 3. view, form 만들기 
 '''

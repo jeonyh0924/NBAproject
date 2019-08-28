@@ -2,6 +2,20 @@ from django.contrib import admin
 from .models import *
 
 
+#
+# @admin.register(PlayerRoster)
+# class PlayerRosterAdmin(admin.ModelAdmin):
+#     list_display = ['player', 'roster', 'create_date', 'update_date',
+#                     ]
+#     fieldsets = (
+#         ('PlayerRoster', {
+#             'fields': (
+#                 'player', 'roster',
+#             )
+#         }),
+#     )
+
+
 @admin.register(Roster)
 class RosterAdmin(admin.ModelAdmin):
     list_display = ['name']
@@ -9,10 +23,11 @@ class RosterAdmin(admin.ModelAdmin):
     fieldsets = (
         ('선수', {
             'fields': (
-                # 'player',
+                'name',
             )
         }),
     )
+
 
 @admin.register(PlayerOption)
 class PlayerOptionAdmin(admin.ModelAdmin):
@@ -60,18 +75,23 @@ class PlayerAdmin(admin.ModelAdmin):
     def make_objects(ModelAdmin, request, queryset):
         Player.crawler()
 
+    def matching_option(ModelAdmin, request, queryset):
+        Player.matching_option()
+
     make_objects.short_description = "선수 크롤러 실행"
+
+    matching_option.sh
 
     list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team', ]
     list_per_page = 15
     list_filter = ['team', 'position']
-    ordering = ['-pk', ]
+    ordering = ['pk', ]
     actions = [make_objects]
     search_fields = ['team__name', 'back_number', 'name']
 
     fieldsets = (
         ('챌린지', {
-            'fields': ('challenge', 'playeroption')
+            'fields': ('playeroption',)
         }),
         ('소속 팀', {
             'fields': ('team',)
