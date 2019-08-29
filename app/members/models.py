@@ -354,7 +354,7 @@ class Roster(models.Model):
 
 # 1. 선수 목록 pk 1 ~ 25 까지 강제 설정 ##
 
-# 2. html 페이지 만들기 
+# 2. html 페이지 만들기   ##
 
-# 3. view, form 만들기 
+# 3. view, form 만들기  -> 
 '''

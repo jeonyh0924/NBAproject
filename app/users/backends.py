@@ -26,7 +26,7 @@ class FacebookBackEnd:
         # request token을 access 토큰으로 교환
         params = {
             'client_id': settings.FACEBOOK_APP_ID,
-            'redirect_uri': 'http://localhost:8000/users/facebook-login/',
+            'redirect_uri': 'http://loadbalancer814-764196237.ap-northeast-2.elb.amazonaws.com/users/facebook-login/',
             'client_secret': settings.FACEBOOK_APP_SECRET,
             'code': code,
         }
