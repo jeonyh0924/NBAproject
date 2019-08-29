@@ -1,4 +1,6 @@
 import imghdr
+import json
+import os
 
 import requests
 from django.conf import settings
@@ -6,6 +8,16 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 User = get_user_model()
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ROOT_DIR = os.path.dirname(BASE_DIR)
+
+SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
+# .secrets/base.json에 있는 데이터를 파싱하여 파이썬 dict가져옴
+secrets = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
+
+FACEBOOK_APP_ID = secrets['FACEBOOK_APP_ID']
+FACEBOOK_APP_SECRET = secrets['FACEBOOK_APP_SECRET']
 
 
 class FacebookBackEnd:
@@ -25,9 +37,9 @@ class FacebookBackEnd:
 
         # request token을 access 토큰으로 교환
         params = {
-            'client_id': settings.FACEBOOK_APP_ID,
+            'client_id': FACEBOOK_APP_ID,
             'redirect_uri': 'http://loadbalancer814-764196237.ap-northeast-2.elb.amazonaws.com/users/facebook-login/',
-            'client_secret': settings.FACEBOOK_APP_SECRET,
+            'client_secret': FACEBOOK_APP_SECRET,
             'code': code,
         }
         response = requests.get(api_get_access_token, params)

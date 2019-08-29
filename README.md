@@ -27,6 +27,11 @@ json
 [정규표현식](https://highcode.tistory.com/6)
 
 [모델링 정방향 역방향] (https://whatisthenext.tistory.com/118)
+
+https://github.com/Fastcampus-WPS-9th/Instagram/blob/f714808a06a787d30a4dee4d591721ee3dbf69a3/app/templates/posts/post_list.html
+강사님 깃
+	
+
 ## settings.py
 STATICFILES_DIRS = [
     STATIC_DIR,
@@ -180,10 +185,6 @@ HTTP 프로토콜은 비 연속적이다.
 >	브라우저에 저장된 값이다.
 >	HTTP 요청을 보낼 때 마다 해당 값을 항상 요청에 담아서 보낸다. (도메인 기준)
 >	Header 부분에 담아서 보낸다.
-
-https://github.com/Fastcampus-WPS-9th/Instagram/blob/f714808a06a787d30a4dee4d591721ee3dbf69a3/app/templates/posts/post_list.html
-강사님 깃
-	
 ## 부트스트랩
 https://getbootstrap.com/docs/4.1/getting-started/introduction/
 

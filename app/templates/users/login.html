@@ -30,7 +30,7 @@ col - sm : 작은 화면
         {% endfor %}
 
         <button class="btn btn-primary btn-block btn-lg" type="submit">로그인</button>
-        <a href="https://www.facebook.com/v3.3/dialog/oauth?client_id=2758070464266486&redirect_uri=http://localhost:8000/users/facebook-login/"
+        <a href="https://www.facebook.com/v3.3/dialog/oauth?client_id=2758070464266486&redirect_uri=loadbalancer814-764196237.ap-northeast-2.elb.amazonaws.com/users/facebook-login/"
            class="btn btn-lg btn-info btn-block">페이스북 로그인</a>
 
         <a href="{% provider_login_url 'google' %}" class="btn btn-block btn-lg btn-light">구글 로그인</a>
