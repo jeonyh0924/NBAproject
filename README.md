@@ -753,3 +753,8 @@ return render(request, 'template.html', context)
  * .col-lg-*
 
 	 * 1200px 이하에서 세로로 표시 시작 
+
+
+## challenge validation 
+
+[생성횟수 제한 & save 커스텀](https://stackoverflow.com/questions/2138408/limit-number-of-model-instances-to-be-created-django)

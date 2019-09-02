@@ -5,25 +5,30 @@
 
     <div class="card-group offset-2">
 
-        {% for player, option_list in zip_lists %}
-        <div class="border col-lg-2 ml-3 mb-3">
-            <a href="{% url 'members:player-detail' player_id=player.pk %}">
-                <img src="{{ player.image.url }}" class="card-img-top" alt="...">
-            </a>
-            <div class="text-center">
-                <a href="{% url 'members:player-detail' player_id=player.pk %}"
-                   style="color: black; text-align: center;">
-                    {{ player.name }}</a>
-                <p> dollars : {{ option_list }}</p>
-            </div>
 
+        <div class="row">
+            {% for player, option_list in zip_lists %}
+            <div class="border col-lg-2 ml-3 mb-3">
+                <a href="{% url 'members:player-detail' player_id=player.pk %}">
+                    <img src="{{ player.image.url }}" class="card-img-top" alt="...">
+                </a>
+                <div class="text-center">
+                    <a href="{% url 'members:player-detail' player_id=player.pk %}"
+                       style="color: black; text-align: center;">
+                        {{ player.name }}</a>
+                    <p> dollars : {{ option_list }}</p>
+                </div>
+
+            </div>
+            {% endfor %}l
         </div>
-        {% endfor %}
+
 
     </div>
 
 </div>
-<div class="container text-center col-lg-4 col-lg-offset-4">
+<div class="container text-center col-lg-4 offset-5">
     <a href="#" class="btn btn-primary btn-block btn-lg"> 팀 만들기 </a>
 </div>
+
 {% endblock %}

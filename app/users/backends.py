@@ -7,17 +7,9 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+from config.settings.base import FACEBOOK_APP_ID, FACEBOOK_APP_SECRET
+
 User = get_user_model()
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-ROOT_DIR = os.path.dirname(BASE_DIR)
-
-SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
-# .secrets/base.json에 있는 데이터를 파싱하여 파이썬 dict가져옴
-secrets = json.load(open(os.path.join(SECRET_DIR, 'base.json')))
-
-FACEBOOK_APP_ID = secrets['FACEBOOK_APP_ID']
-FACEBOOK_APP_SECRET = secrets['FACEBOOK_APP_SECRET']
 
 
 class FacebookBackEnd:
