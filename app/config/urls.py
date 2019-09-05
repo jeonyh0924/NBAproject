@@ -35,6 +35,8 @@ urlpatterns = [
     # path('explore/tags/<str:tag_name>/', tag_post_list, name='tag-post-list'),
     # 이미 존재하는 url
     path('accounts/', include('allauth.urls')),
+    path('shop/', include('shop.urls')),
+    path('cart/', include('cart.urls')),
 
 ]
 urlpatterns += static(

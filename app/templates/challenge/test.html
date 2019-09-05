@@ -9,8 +9,8 @@
         <div class="row">
             {% for player, option_list in zip_lists %}
             <div class="border col-lg-2 ml-3 mb-3">
-                <a href="{% url 'members:player-detail' player_id=player.pk %}">
-                    <img src="{{ player.image.url }}" class="card-img-top" alt="...">
+                <a href=" {% url 'members:player-detail' player_id=player.pk %}">
+                <img src="{{ player.image.url }}" class="card-img-top" alt="...">
                 </a>
                 <div class="text-center">
                     <a href="{% url 'members:player-detail' player_id=player.pk %}"

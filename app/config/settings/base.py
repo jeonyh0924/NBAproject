@@ -67,6 +67,9 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_crontab',
 
+    'shop',
+    'cart',
+
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
     'members.apps.MembersConfig',
@@ -158,3 +161,5 @@ USE_I18N = True
 USE_L10N = True
 # USE_TZ 값이 True이면 DB에 저장할 하거나 화면에 출력할 때 +/-9시간을 계산합니다.
 USE_TZ = True
+
+CART_ID = 'cart_in_session'
