@@ -52,7 +52,7 @@ class PlayerOptionAdmin(admin.ModelAdmin):
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['id', 'name']
-
+    list_display_links = ['name', ]
     ordering = ['pk']
 
     def __unicode__(self):
@@ -78,6 +78,7 @@ class PlayerAdmin(admin.ModelAdmin):
     make_objects.short_description = "선수 크롤러 실행"
 
     list_display = ['id', 'first_name', 'last_name', 'back_number', 'position', 'team', ]
+    list_display_links = ['first_name', 'last_name']
     list_per_page = 15
     list_filter = ['team', 'position']
     ordering = ['pk', ]

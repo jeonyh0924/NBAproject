@@ -1,6 +1,6 @@
 {% load static %}
 <!doctype html>
-<html lang="ko">
+<html lang="ko" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,6 +10,19 @@
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
     <!-- Bootstap CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+            integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+            crossorigin="anonymous"></script>
     <title>capstone NBA site</title>
     <style>
         .square {
@@ -31,54 +44,55 @@
 </head>
 <body>
 <div id="wrap">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light col-lg-10 offset-1 mt-4 rounded">
         <a href="{% url 'index' %}" class="navbar-brand">capstone NBA Site</a>
-        <form action="{% url 'posts:tag-search' %}" class="form-inline ml-md-auto">
-            <input type="text"
-                   name="search_keyword"
-                   class="form-control"
-                   placeholder="검색">
-        </form>
+
+
 
         <ul class="navbar-nav ml-md-auto">
 
-            <li class="nav-item mr-sm-1">
-                <a href="{% url 'posts:post-create' %}" class="btn btn-outline-primary"> + Add Post</a>
-            </li>
-            <li class="nav-item mr-sm-1">
-                <a href="{% url 'posts:post-list' %}" class="btn btn-outline-secondary">Post</a>
-            </li>
-            <li class="nav-item mr-sm-1">
-                <a href="{% url 'members:team-list' %}" class="btn btn-outline-secondary">Team</a>
-            </li>
-            <li class="nav-item mr-sm-1">
-                <a href="{% url 'members:challenge' %}" class="btn btn-outline-secondary">Challenge</a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">Profile
-                    {% if user.is_authenticated %}
-                        ({{ user.first_name }})
-                    {% endif %}
-                </a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <form action="{% url 'users:logout' %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-secondary">Log out</button>
 
-                    </form>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a href="{% url 'users:login' %}" class="btn btn-outline-secondary">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'users:signup' %}" class="btn btn-outline-secondary">Sign Up</a>
-                </li>
-            {% endif %}
+            <div class="btn-group dropleft">
+                <button type="button" class="btn btn-secondary dropdown-toggle bg-light text-dark"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {% if user.is_authenticated %}
+                    ({{ user.first_name }})
+                    {% endif %}
+                </button>
+                <div class="dropdown-menu">
+                    {% if user.is_authenticated %}
+                    <a class="dropdown-item text-center" href="{% url 'users:profile' %}">Profile</a>
+
+                    <a class="dropdown-item" href="#">
+                        <form action="{% url 'users:logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item text-center">Log out</button>
+                        </form>
+                    </a>
+                    {% else %}
+                    <a class="dropdown-item" href="{% url 'users:login' %}">Log In</a>
+                    <a class="dropdown-item" href="{% url 'users:signup' %}">Sign Up</a>
+                    {% endif %}
+
+                </div>
+            </div>
         </ul>
     </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light col-lg-10 offset-1 mt-4 rounded">
+        <ul class="navbar-nav ml-md-auto mx-auto mx-md-n5">
+
+            <li class="nav-item mr-sm-1 col px-md-5">
+                <a href="{% url 'posts:post-list' %}" class="btn btn-outline-secondary">Post</a>
+            </li>
+            <li class="nav-item mr-sm-1 col px-md-5">
+                <a href="{% url 'members:team-list' %}" class="btn btn-outline-secondary">Team</a>
+            </li>
+            <li class="nav-item mr-sm-1 col px-md-5">
+                <a href="{% url 'members:challenge' %}" class="btn btn-outline-secondary">Challenge</a>
+            </li>
+        </ul>
+    </nav>
+
     <div class="container-fluid mt-3">
         {% block content %}
         {% endblock %}
@@ -86,3 +100,5 @@
 </div>
 </body>
 </html>
+
+
