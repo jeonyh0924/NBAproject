@@ -1,34 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid ">
 
-    <div class="card-group offset-2">
+    <div class="card-group">
 
 
-        <div class="row">
-            {% for player, option_list in zip_lists %}
-            <div class="border col-lg-2 ml-3 mb-3">
-                <a href=" {% url 'members:player-detail' player_id=player.pk %}">
-                <img src="{{ player.image.url }}" class="card-img-top" alt="...">
-                </a>
-                <div class="text-center">
-                    <a href="{% url 'members:player-detail' player_id=player.pk %}"
-                       style="color: black; text-align: center;">
-                        {{ player.name }}</a>
-                    <p> dollars : {{ option_list }}</p>
+        <form method="post" action="#" class="row offset-1">
+
+                {% csrf_token %}
+                {% for player, option_list in zip_lists %}
+                <div class="border col-lg-2 ml-2 mb-3">
+                    <a href=" {% url 'members:player-detail' player_id=player.pk %}">
+                        <img src="{{ player.image.url }}" class="card-img-top" alt="...">
+                    </a>
+                    <div class="text-center">
+                        <a href="{% url 'members:player-detail' player_id=player.pk %}"
+                           style="color: black; text-align: center;">
+                            {{ player.name }}</a>
+                        <p> dollars : {{ option_list }}</p>
+                    </div>
+
                 </div>
+                {% endfor %}
 
+            <div class="container text-center">
+                <input class="btn btn-primary col-lg-3 mb-3 " style="margin-right: 12.33333333%;" type="submit">
             </div>
-            {% endfor %}l
-        </div>
+        </form>
 
 
     </div>
 
 </div>
-<div class="container text-center mb-4">
-    <a href="#" class="btn btn-primary btn-block"> 팀 만들기 </a>
-</div>
+<!--<div class="container text-center mb-4">-->
+<!--<a href="#" class="btn btn-primary btn-block"> 팀 만들기 </a>-->
+<!--</div>-->
 
 {% endblock %}

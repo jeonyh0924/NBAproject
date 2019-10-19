@@ -754,6 +754,7 @@ return render(request, 'template.html', context)
 
 	 * 1200px 이하에서 세로로 표시 시작 
 
+[offset col비율 꼼수](https://stackoverflow.com/questions/20533969/bootstrap-3-offset-on-right-not-left/20536713)
 
 ## challenge validation 
 
