@@ -16,17 +16,6 @@ from .models import *
 #     )
 
 
-@admin.register(Roster)
-class RosterAdmin(admin.ModelAdmin):
-    list_display = ['name']
-
-    fieldsets = (
-        ('선수', {
-            'fields': (
-                'name',
-            )
-        }),
-    )
 
 
 @admin.register(PlayerOption)

@@ -22,7 +22,7 @@
             <th scope="col"></th>
             <th scope="col"></th>
             <th scope="col"></th>
-            <th scope="col"></th>
+            <th scope="col">좋아요</th>
             <th scope="col">댓글 수</th>
         </tr>
         </thead>
@@ -36,8 +36,12 @@
             <td>
                 <img src="{{ post.user.img_profile_url }}" style="width: 30px; height: 30px; border-radius: 100%;">
             </td>
-            <td colspan="5">
+            <td colspan="4">
                 <a href="{% url 'posts:post-detail' post_pk=post.pk %}" style="color: black">{{post.title}}</a>
+            </td>
+            <td>
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}"
+                   style="color: black">{{post.like_users.count}}</a>
             </td>
             <td>
                 <a href="{% url 'posts:post-detail' post_pk=post.pk %}"

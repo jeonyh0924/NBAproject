@@ -32,6 +32,7 @@ def post_detail(request, post_pk):
     return render(request, 'posts/post_detail.html', context)
 
 
+# fbv에서 각 뷰에 접근 시 , 로그인 여부를 통해 통제
 @login_required
 def post_create(request):
     # if not request.user.is_authenticated:
@@ -131,5 +132,6 @@ def post_like_toggle(request, post_pk):
     if request.method == 'POST':
         post = get_object_or_404(Post, pk=post_pk)
         post.like_toggle(request.user)
-        url = reverse('posts:post-list')
-        return redirect(url + f'#post-{post_pk}')
+        # url = reverse('posts:post-list')
+        # return redirect(url + f'#post-{post_pk}')
+        return redirect('posts:post-detail', post_pk)

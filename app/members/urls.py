@@ -9,4 +9,5 @@ urlpatterns = [
     path('<int:team_id>/', views.detail, name='team-detail'),
     path('player/<int:player_id>/', views.player_detail, name='player-detail'),
     path('challenge/', views.challenge, name='challenge'),
+    path('challengeValid', views.challenge_valid, name='valid'),
 ]

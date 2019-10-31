@@ -6,8 +6,14 @@ production_secrets = json.load(open(os.path.join(SECRET_DIR, 'production.json'))
 DEBUG = True
 
 # 아마존에서 제공해주는 URL에 접속을 허용하는 코드
-ALLOWED_HOSTS = production_secrets['ALLOWED_HOSTS']
-
+ALLOWED_HOSTS = [
+    '.amazonaws.com',
+    '127.0.0.1',
+    'localhost',
+    'mynbasite01295.kr',
+    'www.mynbasite01295.kr',
+    'api.mynbasite01295.kr'
+]
 # postgreSQL - RDS
 # DATABASES = production_secrets['DATABASES']
 

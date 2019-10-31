@@ -50,14 +50,7 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(max_length=10)),
             ],
         ),
-        migrations.CreateModel(
-            name='Roster',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=128)),
-                ('player', models.ManyToManyField(null=True, related_name='player_set', related_query_name='players', to='members.Player')),
-            ],
-        ),
+
         migrations.CreateModel(
             name='Team',
             fields=[

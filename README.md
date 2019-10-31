@@ -439,6 +439,24 @@ LOGIN_REDIRECT_URL='/'
 
 -------
 
+## Oauth 를 통해 발생 할 수 있는 오류 
+로컬 서버의 contrib.auth 의 함수 (sign up)을 할 시 settings에서 
+
+```
+AUTHENTICATION_BACKENDS = [
+    # 리스트말고 튜플이라는데 좀 이따가 안되면 수정해보
+    'django.contrib.auth.backends.ModelBackend',
+    'users.backends.FacebookBackEnd',
+    # allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+```
+이 부분이 충돌이 나 app User - view - singup_ view[login(request, user)] 해당 부분에서 오류 ```multiple authentication backends configured and therefore must provide the `backend` argument or set the `backend` attribute on the user
+``` 의 이름으로 에러 발생 
+> 해결 : login(request, user, backend='django.contrib.auth.backends.ModelBackend') 백엔드의 args 값을 지정하였다. 
+
+
 ### urls.py
 django-allauth를 다운 받게 되면서 생기는 url의 패턴을 추가한다
 ```path('accounts/', include('allauth.urls')),```
@@ -759,3 +777,7 @@ return render(request, 'template.html', context)
 ## challenge validation 
 
 [생성횟수 제한 & save 커스텀](https://stackoverflow.com/questions/2138408/limit-number-of-model-instances-to-be-created-django)
+
+
+
+##https://seongjaemoon.github.io/python/2017/12/16/pythonSort.html

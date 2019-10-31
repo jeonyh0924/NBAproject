@@ -321,17 +321,6 @@ class PlayerOption(models.Model):
             PlayerOption.objects.create(value=index_list[i], type='test', )
 
 
-class Roster(models.Model):
-    name = models.CharField(max_length=128)
-    player = models.ManyToManyField(
-        Player,
-        # through='PlayerRoster',
-        null=True,
-        related_name='player_set',
-        related_query_name='players'
-    )
-
-
 #
 # class PlayerRoster(models.Model):
 #     player = models.ForeignKey(Player, on_delete=models.CASCADE, )

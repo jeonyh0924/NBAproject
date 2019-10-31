@@ -1,15 +1,59 @@
 {% extends 'base.html' %}
 {% block content %}
 <div>
-    {% for post in posts %}
-    <div id="post-{{post.pk}}" class="col col-lg-10 offset-lg-1">
-        <div class="card">
-            <div class="card-header">
-                <a href="{% url 'posts:post-detail' post_pk=post.pk %}">{{post.title}}</a>
 
-            </div>
-            {% endfor %}
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">게시글 번호</th>
+            <th scope="col">작성자</th>
+            <th scope="col">작성자 이미지</th>
+            <th scope="col">제목</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">좋아요</th>
+            <th scope="col">댓글 수</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+        <tr>
+            <th scope="row">
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}" style="color: black">{{post.pk}}</a>
+            </th>
+            <td>{{post.user}}</td>
+            <td>
+                <img src="{{ post.user.img_profile_url }}" style="width: 30px; height: 30px; border-radius: 100%;">
+            </td>
+            <td colspan="4">
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}" style="color: black">{{post.title}}</a>
+            </td>
+            <td>
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}"
+                   style="color: black">{{post.like_users.count}}</a>
+            </td>
+            <td>
+                <a href="{% url 'posts:post-detail' post_pk=post.pk %}"
+                   style="color: black">{{post.comment_set.count}}</a>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+    <div class="container text-center mt-1">
+        <div>
+            <form action="{% url 'posts:tag-search' %}" class="ml-md-auto mb-4">
+                <input type="text"
+                       name="search_keyword"
+                       class="form-control"
+                       placeholder="태그를 찾아줍니다. like) HUS OKC">
+            </form>
         </div>
+        <a href="{% url 'posts:post-create' %}" class="btn btn-outline-primary"> + Add Post</a>
     </div>
+
 </div>
 {% endblock %}
