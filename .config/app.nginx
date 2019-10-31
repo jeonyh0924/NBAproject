@@ -3,6 +3,7 @@
 #}
 server{
     listen 80;
+    listen 443;
     server_name 127.0.0.1 localhost *.amazonaws.com mynbasite01295.kr www.mynbasite01295.kr api.mynbasite01295.kr;
     charset utf-8;
     client_max_body_size 128M;
@@ -23,5 +24,9 @@ server{
 
     location /media/ {
         alias /srv/project/.media/;
+    }
+
+    if ($http_x_forwarded_proto = 'http') {
+        return 301 https://$host$request_uri;
     }
 }
