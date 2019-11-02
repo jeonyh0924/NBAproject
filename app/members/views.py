@@ -56,14 +56,13 @@ def challenge(request):
     context = {
         'zip_lists': zip_list,
     }
-    return render(request, 'challenge/test_1.html', context)
-    # return render(request, 'challenge/test.html', context)
+    # return render(request, 'challenge/test_1.html', context)
+    return render(request, 'challenge/test.html', context)
 
 
 # 받아 온 선수가 challenge 양식에 맞는지
 def challenge_valid(request):
     if request.method == 'POST':
         user = request.user
-        pk = request.POST.get('pk')
-    pass
-
+        id = request.POST.get('pk', None)
+        player = Player.objects.get(pk=id)

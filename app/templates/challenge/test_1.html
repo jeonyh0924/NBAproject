@@ -33,13 +33,13 @@
 </div>
 <script type="text/javascript">
     $('.like').click(function (e) {
-        var pk = $(this).attr('name')
+        var pk = $(this).attr('pk')
         $.ajax({
             type: 'POST',
             url: "{% url 'members:valid' %}",
             data: {
                 'pk': pk,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
             }
         })
     });
