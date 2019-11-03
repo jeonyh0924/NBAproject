@@ -4,6 +4,12 @@
 
 <div class="container">
 
+    <div class="container text-center ">
+        <img class="center-block mx-auto" src="{{ player.team.team_image.url }}"
+             style="width: 150px; height: 150px; border-radius: 100%;">
+        <div class="font-weight-bold mb-3">{{ player.team.name }}</div>
+    </div>
+
     <div class="row " id="team.name">
         <div class="col-sm-2">
             <table class="table">
@@ -41,9 +47,7 @@
 
                 <p class="card-text font-weight-bold">키 : {{player.height}}</p>
                 <p class="card-text font-weight-bold">무게 : {{player.weight}}</p>
-                {% if user.is_authenticated %}
-                <a href="#" class="btn btn-primary">내 팀에 추가</a>
-                {% endif %}
+
             </div>
 
         </div>

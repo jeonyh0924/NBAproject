@@ -113,8 +113,14 @@ def player_valid(request, player_pk):
             player_list.append(i.name)
             change -= int(i.playeroption.filter(type='test')[0].value)
 
+        if change < 0:
+            messages.warning(request, f'15달러보다 더 많은 금액을 사용하였습니다. 선수단 초기화를 누르세요 ({change})')
+            return render(request, 'challenge/test.html', context)
         messages.info(request, f'선수 : {name} 는 ({username})의 선수가 되었습니다. 남은 dollars는 {change}')
         messages.info(request, f'사용자의 선수들은 {player_list} 입니다')
+
+        if change == 0 and len(player_list) == 5:
+            messages.info(request, f'선수단 구성을 완료하였습니다. ')
         return render(request, 'challenge/test.html', context)
 
 

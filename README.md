@@ -816,4 +816,5 @@ post_list_queryset = Post.objects.all()
 
 3. members:views def challenge 함수를 통해 test 그룹의 값들을 context에 담아서 보냈다. 
 
-4. 
+4. test.html에서 for 문에 담긴 정보들을 form에 담아서 input태그로 get 방식을 통해 서버에서 전달을 받는다.
+
