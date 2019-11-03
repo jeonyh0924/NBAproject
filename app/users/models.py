@@ -1,8 +1,10 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.db import models
 
 # Create your models here.
+
 from members.models import Player
 
 
@@ -12,11 +14,12 @@ class User(AbstractUser):
         blank=True
     )
     introduce = models.TextField(max_length=300, blank=True, null=True)
-    player = models.ManyToManyField(
+
+    like_player = models.ManyToManyField(
         Player,
-        # through='RelationShip',
-        related_name='user',
-        related_query_name='users',
+        through='Challenge',
+        related_name='like_users',
+        related_query_name='like_user',
     )
 
     def __str__(self):
@@ -34,3 +37,14 @@ class User(AbstractUser):
         if not postlike_created:
             postlike.delete()
 
+
+class Challenge(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    player = models.ForeignKey(
+        Player,
+        on_delete=models.CASCADE,
+    )
+    type = models.CharField(max_length=10, blank=True, null=True)

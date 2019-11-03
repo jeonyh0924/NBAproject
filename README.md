@@ -780,4 +780,40 @@ return render(request, 'template.html', context)
 
 
 
-##https://seongjaemoon.github.io/python/2017/12/16/pythonSort.html
+## 정렬 알고리즘을 이용하여 메인 페이지의 인기글 리스트를 구현 하였다.
+참고 ```https://seongjaemoon.github.io/python/2017/12/16/pythonSort.html```
+
+구현 코드 
+
+```python
+post_list_queryset = Post.objects.all()
+    post_list = []
+    for post in post_list_queryset:
+        post_list.append(post)
+
+    for i in range(1, len(post_list)):
+        for j in range(0, len(post_list) - 1):
+            if post_list[j].like_users.count() < post_list[j + 1].like_users.count():
+                post_list[j + 1], post_list[j] = post_list[j], post_list[j + 1]
+
+    best_posts = post_list[0:3]
+    context = {
+        'best_posts': best_posts,
+    }
+    return render(request, 'base.html', context)    
+```
+
+## challenge 구현 일지
+- js 를 이용하여 한 페이지 내에서 한번의 request로 처리를 하고 싶었지만, js에 익숙하지 않아 처리할 방법에 난항을 겪음.
+
+- 각 선수들을 하나의 form 으로 구별, 반복문을 통하여 각각의 폼들을 한 페이지에 내보냄
+
+- 각 form 안에 있는 input 태그를 통하여 get요청 안에 playeroption의 type을 하드코딩 하였다, 옆에는 선수의 가치를 담은 변수를 넣어 get 요청 시, 쿼리셋에 해당 challenge에 대한 정보를 담아서 view에서 player.objects.filter에 사용될 정보를 담았다. 
+
+1. PlayerOption models에 staticmethod def make_dollars를 만들어 1부터 5까지의 value를 가진 5개의 인스턴스를 type은 test라는 인스턴스로 생성
+ 
+2. Player models에 matching_option라는 스태틱 메서드를 넣었다. 해당 메서드는 초기 25개의 선수 인스턴스를 1부터 5까지의 value 를 가진 playeroption 과 각각 5명씩 매칭시킨다.
+
+3. members:views def challenge 함수를 통해 test 그룹의 값들을 context에 담아서 보냈다. 
+
+4. 

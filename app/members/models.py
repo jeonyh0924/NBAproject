@@ -277,14 +277,14 @@ class Player(models.Model):
                 #     print(player_path, "인덱스 에러 발생")
                 #     pass
 
-    #   챌린지 기본 세팅 함수 만들기
-    @staticmethod
-    def matching_option():
-        o_list = PlayerOption.objects.all()
-        p_list = Player.objects.all()
-        for i in range(25):
-            p_list[i].playeroption.set(o_list[i % 5].value)
+    # @staticmethod
+    # def matching_option():
+    #     o_list = PlayerOption.objects.all()
+    #     p_list = Player.objects.all()
+    #     for i in range(25):
+    #         p_list[i].playeroption.set(o_list[i % 5].value)
 
+    #   챌린지 기본 세팅 함수 만들기
     @staticmethod
     def make_list():
         index = 0

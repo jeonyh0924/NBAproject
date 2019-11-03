@@ -1,26 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container-fluid ">
+{% if messages %}
+<ul class="message">
+    {% for message in messages %}
+    <div class="alert alert-info mt-3 text-center">{{ message }}</div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="container text-center mt-1 mb-4">
+    <a href="{% url 'members:player-clear' %}" class="btn btn-outline-primary"> 선수단 초기화 </a>
+</div>
+
+<div class="container-fluid offset-1">
 
     <div class="card-group">
-
+        <div class="col-lg-2 ml-2 mb-3 text-center border">
+            PG
+        </div>
+        <div class="col-lg-2 ml-2 mb-3 text-center border">
+            SG
+        </div>
+        <div class="col-lg-2 ml-2 mb-3 text-center border">
+            SF
+        </div>
+        <div class="col-lg-2 ml-2 mb-3 text-center border">
+            PF
+        </div>
+        <div class="col-lg-2 ml-2 mb-3 text-center border">
+            C
+        </div>
         {% for player, option_list in zip_lists %}
-        <form method="post" action="" class="row offset-1">
-            {% csrf_token %}
-
-            <div class="border col-lg-2 ml-2 mb-3">
-                <a href=" {% url 'members:player-detail' player_id=player.pk %}">
-                    <img src="{{ player.image.url }}" class="card-img-top" alt="...">
-                </a>
-                <div class="text-center">
-                    <a href="{% url 'members:player-detail' player_id=player.pk %}"
-                       style="color: black; text-align: center;">
-                        {{ player.name }}</a>
-                    <p> dollars : {{ option_list }}</p>
-                </div>
-
+        <form method="GET" action="{% url 'members:player-valid' player_pk=player.pk %}"
+              class="col-lg-2 ml-2 mb-3 border-left border-right">
+            <a href=" {% url 'members:player-detail' player_id=player.pk %}">
+                <img src="{{ player.image.url }}" class="card-img-top" alt="...">
+            </a>
+            <div class="text-center">
+                <a href="{% url 'members:player-detail' player_id=player.pk %}"
+                   style="color: black; text-align: center;">
+                    {{ player.name }}</a>
             </div>
+            <input type="submit" class="col-lg-12" name="test" value="{{option_list}}">
         </form>
         {% endfor %}
 
@@ -32,5 +54,4 @@
     </div>
 
 </div>
-
 {% endblock %}
