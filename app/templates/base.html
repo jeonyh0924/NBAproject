@@ -86,8 +86,15 @@
             <li class="nav-item mr-sm-1 col px-md-5">
                 <a href="{% url 'members:team-list' %}" class="btn btn-outline-secondary">Team</a>
             </li>
-            <li class="nav-item mr-sm-1 col px-md-5">
-                <a href="{% url 'members:challenge' %}" class="btn btn-outline-secondary">Challenge</a>
+            <li class="nav-item mr-sm-1 col px-md-5 dropright">
+                <a class="btn btn-outline-secondary nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Challenge
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'members:challenge' %}">15 dollars Challenge</a>
+                    <a class="dropdown-item" href="{% url 'challengepost:list' %}">Challenge Posts list</a>
+
+                </div>
             </li>
         </ul>
     </nav>
@@ -99,46 +106,90 @@
     </div>
 
 </div>
-<div class="row mb-2 mt-5">
+{% if best_posts %}
+    <div class="row mb-2 mt-5">
+        <!-- best_posts list -->
+        <div class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <ul class="list-group">
+                        <p class="text-center font-weight-bold">인기글</p>
+                        <!-- 인기글 반복문 -->
+                        {% for post in best_posts %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'posts:post-detail' post_pk=post.pk %}"> {{post.title}} </a>
+                            <span class="badge badge-primary badge-pill">{{post.like_users.count}}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- best_player html -->
+        <div class="col-md-5 mr-1">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static col-md-5">
+                    <strong class="d-inline-block mb-2 text-success">가장 많이 선정된 선수</strong>
+                    <h3 class="mb-0">
+                        <a class="text-reset text-muted font-weight-normal" href="{% url 'members:player-detail' player_id=best_player.pk %}">
+                        {{ best_player.name }}
+                        </a>
+                    </h3>
+                    <div class="mb-1 text-muted">등번호 : {{best_player.back_number }}</div>
+                    <p class="mb-auto">
+                        <a class="text-monospace" href="{% url 'members:team-detail' team_id=best_player.team.pk %}">
+                        {{best_player.team}}
+                        </a>
+                    </p>
+                    <p>포지션 : {{ best_player.position}}</p>
+                    <p>선정 횟수 : {{ best_player.like_users.count}} </p>
+                </div>
+                <div class="col-auto d-none d-lg-block col-md-7 border-left">
+                    <img src="{{best_player.image.url}}" class="bd-placeholder-img col-12" width="200" height="250" alt="..."
+                    preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
 
-    <div class="col-md-6">
-        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-2">
+        <!-- 포스트 인기글 -->
+        <div class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <ul class="list-group">
+                        <p class="text-center font-weight-bold"> 15 Dollars Challenge 인기글 </p>
+                        <!-- 챌린지 인기글 반복문 -->
+                        {% for chpost in challenge_posts_list %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'challengepost:detail' post_pk=chpost.pk %}"> {{chpost.title}} </a>
+                            <span class="badge badge-primary badge-pill">{{chpost.like_users.count}}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--기사 크롤링 코드 장소 -->
+        <div class="col-md-6">
+          <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
             <div class="col p-4 d-flex flex-column position-static">
-                <ul class="list-group">
-                    {% if best_posts %}
-                    <p class="text-center font-weight-bold">인기글</p>
-                    {% for post in best_posts %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href="{% url 'posts:post-detail' post_pk=post.pk %}"> {{post.title}} </a>
-                        <span class="badge badge-primary badge-pill">{{post.like_users.count}}</span>
-                    </li>
-                    {% endfor %}
-                    {% endif %}
-                </ul>
+              <strong class="d-inline-block mb-2 text-success">기사</strong>
+              <h3 class="mb-0">크롤링 기사 코드 둘 장소 </h3>
+              <div class="mb-1 text-muted">#</div>
+              <p class="mb-auto">#</p>
+              <a href="#" class="stretched-link">#</a>
             </div>
+            <div class="col-auto d-none d-lg-block">
+              <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">#</text></svg>
+            </div>
+          </div>
         </div>
-    </div>
-
-    <div class="col-md-5 mr-1">
-        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-            <div class="col p-4 d-flex flex-column position-static col-md-5">
-                <strong class="d-inline-block mb-2 text-success">가장 많이 선정된 선수</strong>
-                <h3 class="mb-0">{{ best_player.name }}</h3>
-                <div class="mb-1 text-muted">등번호 : {{best_player.back_number }}</div>
-                <p class="mb-auto">
-                    {{best_player.team}}
-                </p>
-                <p>포지션 : {{ best_player.position}}</p>
-                <p>선정 횟수 : {{ best_player.like_users.count}} 회</p>
-            </div>
-            <div class="col-auto d-none d-lg-block col-md-7 border-left">
-                <img src="{{best_player.image.url}}" class="bd-placeholder-img col-12" width="200" height="250" alt="..."
-                preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-
-            </div>
-        </div>
-    </div>
-</div>
+      </div>
+{% endif %}
 <hr/>
 
 <footer class="text-muted">
