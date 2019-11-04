@@ -47,7 +47,9 @@
         {% endfor %}
 
         <div class="container text-center">
-            <input class="btn btn-primary col-lg-3 mb-3 " style="margin-right: 12.33333333%;" type="submit">
+            <form action="{% url 'challengepost:create' %}">
+                <input class="btn btn-primary col-lg-3 mb-3 " style="margin-right: 12.33333333%;" type="submit">
+            </form>
         </div>
 
 

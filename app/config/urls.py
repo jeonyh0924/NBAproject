@@ -37,6 +37,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('shop/', include('shop.urls')),
     path('cart/', include('cart.urls')),
+    path('challengepost/', include('challengepost.urls')),
 
 ]
 urlpatterns += static(

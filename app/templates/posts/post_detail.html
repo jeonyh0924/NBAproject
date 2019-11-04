@@ -2,7 +2,8 @@
 {% load static %}
 {% block content %}
 <div>
-    <div id="post-{{post.pk}}" class="col col-lg-6 offset-lg-3  ">
+
+    <div id="post-{{post.pk}}" class="col col-lg-12">
         <div class="card">
             <div class="card-header">
                 {{post.title}}
@@ -32,7 +33,6 @@
             <ul class="list-group">
                     {% for comment in post.comment_set.all %}
                     <li class="list-group-item ">
-
                         <strong>{{ comment.author}}</strong>
                         <span>{{ comment.html|safe}}</span>
 

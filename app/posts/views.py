@@ -25,9 +25,11 @@ def post_list(request):
 
 def post_detail(request, post_pk):
     post = Post.objects.get(pk=post_pk)
+
     context = {
         'post': post,
         'comment_form': CommentForm(),
+
     }
     return render(request, 'posts/post_detail.html', context)
 

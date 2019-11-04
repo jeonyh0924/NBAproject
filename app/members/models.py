@@ -6,6 +6,8 @@ from django.core.files import File
 from django.db import models
 import datetime
 
+from selenium.common.exceptions import NoSuchElementException
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
@@ -199,35 +201,39 @@ class Player(models.Model):
                 variable.RPG = player_stats[5]
                 variable.APG = player_stats[6]
                 variable.BPG = player_stats[7]
+                try:
 
-                variable.back_number = driver.find_element_by_xpath(
-                    '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[1]').get_attribute(
-                    "innerText")[1:]
-                variable.position = driver.find_element_by_xpath(
-                    '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[3]').get_attribute(
-                    'innerText')
-                variable.first_name = driver.find_element_by_xpath(
-                    '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[1]').get_attribute(
-                    'innerText')
-                variable.last_name = driver.find_element_by_xpath(
-                    '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[2]').get_attribute(
-                    'innerText')
-                variable.height = driver.find_element_by_xpath(
-                    '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[1]/p[3]').get_attribute(
-                    'innerText')[2:]
-                variable.weight = driver.find_element_by_xpath(
-                    '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[2]/p[3]').get_attribute(
-                    'innerText')[2:]
-                variable.born = driver.find_element_by_xpath(
-                    '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[1]/span[2]').get_attribute(
-                    'innerText')
-                variable.hometown = driver.find_element_by_xpath(
-                    '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[3]/span[2]').get_attribute(
-                    'innerText')
-                variable.nba_debut = driver.find_element_by_xpath(
-                    '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[4]/span[2]').get_attribute(
-                    'innerText')
-                variable.name = variable.first_name + variable.last_name
+                    variable.back_number = driver.find_element_by_xpath(
+                        '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[1]').get_attribute(
+                        "innerText")[1:]
+                    variable.position = driver.find_element_by_xpath(
+                        '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/p/span[3]').get_attribute(
+                        'innerText')
+                    variable.first_name = driver.find_element_by_xpath(
+                        '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[1]').get_attribute(
+                        'innerText')
+                    variable.last_name = driver.find_element_by_xpath(
+                        '//*[@id="block-league-content"]/player-detail/section[1]/header/section[2]/section/p[2]').get_attribute(
+                        'innerText')
+                    variable.height = driver.find_element_by_xpath(
+                        '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[1]/p[3]').get_attribute(
+                        'innerText')[2:]
+                    variable.weight = driver.find_element_by_xpath(
+                        '//*[@id="player-tabs-Info"]/section/section[1]/section[1]/section[2]/p[3]').get_attribute(
+                        'innerText')[2:]
+                    variable.born = driver.find_element_by_xpath(
+                        '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[1]/span[2]').get_attribute(
+                        'innerText')
+                    variable.hometown = driver.find_element_by_xpath(
+                        '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[3]/span[2]').get_attribute(
+                        'innerText')
+                    variable.nba_debut = driver.find_element_by_xpath(
+                        '//*[@id="player-tabs-Info"]/section/section[1]/section[2]/ul/li[4]/span[2]').get_attribute(
+                        'innerText')
+                    variable.name = variable.first_name + variable.last_name
+
+                except NoSuchElementException:
+                    pass
 
                 try:
                     player_path = variable.back_number + " " + variable.first_name + " " + variable.last_name
@@ -273,6 +279,7 @@ class Player(models.Model):
                 except FileExistsError:
                     print("already exists ", player_path)
                     pass
+
                 # except IndexError:
                 #     print(player_path, "인덱스 에러 발생")
                 #     pass

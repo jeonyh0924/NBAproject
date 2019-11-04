@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div>
+    <div id="post-{{post.pk}}" class="col col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                {{post.title}}
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">
+                        <span>
+                            <a href="#">
+                                <img src="{{ post.author.img_profile_url }}"
+                                     style="width: 30px; height: 30px; border-radius: 100%;">
+                            </a>
+                        </span>
+                    </th>
+                    <th scope="col">{{post.user.first_name}}</th>
+                    <th scope=" col">{{post.created_at}}</th>
+                    <th scope="col">{{post.id}}</th>
+                </tr>
+                </thead>
+            </table>
+            <div class="card-body">
+
+                <!-- 선수단 구성-->
+                <div class="card-group ml-md-auto">
+                    <div class="offset-1"></div>
+                    {% for player in player_list %}
+                    <div class="card col-lg-2 mb-3 border text-center">
+                        <img src="{{ player.image.url}}" alt="">
+                        {{player.name}}
+                    </div>
+
+                    {% endfor %}
+                </div>
+
+                <div class="container">
+                  <div class="jumbotron mt-3">
+                    <h1>게시글 내용 </h1>
+                    <p class="lead">{{ post.text }}</p>
+
+                  </div>
+                </div>
+                <form action="{% url 'challengepost:post-like-toggle' post_pk=post.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-primary" type="submit">
+                        {% if user in post.like_users.all %}
+                        좋아요 해제
+                        {% else %}
+                        좋아요
+                        {% endif %}
+                    </button>
+                </form>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">글쓴이</th>
+                            <th scope="col" colspan="2">내용</th>
+                            <th scope="col">생성날</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in post.challengecomment_set.all %}
+                            <tr>
+                                <th scope="row">{{ comment.author }}</th>
+                                <td colspan="2">{{ comment.content }}</td>
+
+                                <td>{{ comment.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <!--댓글 작성 form 구현-->
+                <!-- 유저가 로그인을 한 경우에만 보여지도록 -->
+                {% if user.is_authenticated %}
+                <form action="{% url 'challengepost:comment-create' post_pk=post.pk %}" method="POST">
+                    {% csrf_token %}
+                    {{ comments_form.content }}
+                    <button class="btn btn-primary btn-block" type="submit">댓글 작성</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

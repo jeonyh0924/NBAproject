@@ -818,3 +818,27 @@ post_list_queryset = Post.objects.all()
 
 4. test.html에서 for 문에 담긴 정보들을 form에 담아서 input태그로 get 방식을 통해 서버에서 전달을 받는다.
 
+## 가장 많은 유저의 선택을 받은 선수를 골라내는 코드
+
+```python
+# 반복문 이후 가장 많은 선택을 받은 선수를 담을 변수 초기화
+max_player = Player.objects.first()
+
+# 모든 선수를 쿼리로 받아낸다.
+player_query = Player.objects.all()
+
+# 모든 선수를 담아낼 리스트
+player_list = []
+
+# 해당 반복문을 통해서, 선수들을 리스트에 옮겨 담았다.
+for player in player_query:
+	player_list.append(player)
+	
+# 반복문을 통해서 challenge에 선택된 선수들을 count 한다.
+for player in player_list:
+	if int(player.like_users.count()) > int(max_player.like_users.count()):
+		# 가장 많은 사용자의 선택을 받은 선수는 max_player 안에 담겨져 있다.
+		max_player = player
+
+
+```

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center mb-5 mt-5">15 Dollars challenge</h1>
+<div>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">게시글 번호</th>
+            <th scope="col">작성자</th>
+            <th scope="col">작성자 이미지</th>
+            <th scope="col">제목</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">좋아요</th>
+            <th scope="col">댓글 수</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+        <tr>
+            <th scope="row">
+                <a href="{% url 'challengepost:detail' post_pk=post.pk %}" style="color: black">{{post.pk}}</a>
+            </th>
+            <td>{{post.author}}</td>
+            <td>
+                <img src="{{ post.author.img_profile_url }}" style="width: 30px; height: 30px; border-radius: 100%;">
+            </td>
+            <td colspan="4">
+                <a href="{% url 'challengepost:detail' post_pk=post.pk %}" style="color: black">{{post.title}}</a>
+            </td>
+            <td>
+                <a href="{% url 'challengepost:detail' post_pk=post.pk %}"
+                   style="color: black">{{post.like_users.count}}</a>
+            </td>
+            <td>
+                <a href="{% url 'challengepost:detail' post_pk=post.pk %}"
+                   style="color: black">{{post.challengecomment_set.count}}</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

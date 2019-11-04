@@ -98,31 +98,58 @@
         {% endblock %}
     </div>
 
+</div>
+<div class="row mb-2 mt-5">
 
-    <ul class="list-group col-lg-5 offset-1 mt-4 rounded">
-        {% if best_posts %}
-        <p class="text-center font-weight-bold">인기글</p>
-            {% for post in best_posts %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="{% url 'posts:post-detail' post_pk=post.pk %}">
-                    {{post.title}}
-                </a>
-                <span class="badge badge-primary badge-pill">{{post.like_users.count}}</span>
-              </li>
-            {% endfor %}
-        {% endif %}
-    </ul>
+    <div class="col-md-6">
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <ul class="list-group">
+                    {% if best_posts %}
+                    <p class="text-center font-weight-bold">인기글</p>
+                    {% for post in best_posts %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{% url 'posts:post-detail' post_pk=post.pk %}"> {{post.title}} </a>
+                        <span class="badge badge-primary badge-pill">{{post.like_users.count}}</span>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5 mr-1">
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static col-md-5">
+                <strong class="d-inline-block mb-2 text-success">가장 많이 선정된 선수</strong>
+                <h3 class="mb-0">{{ best_player.name }}</h3>
+                <div class="mb-1 text-muted">등번호 : {{best_player.back_number }}</div>
+                <p class="mb-auto">
+                    {{best_player.team}}
+                </p>
+                <p>포지션 : {{ best_player.position}}</p>
+                <p>선정 횟수 : {{ best_player.like_users.count}} 회</p>
+            </div>
+            <div class="col-auto d-none d-lg-block col-md-7 border-left">
+                <img src="{{best_player.image.url}}" class="bd-placeholder-img col-12" width="200" height="250" alt="..."
+                preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+
+            </div>
+        </div>
+    </div>
 </div>
 <hr/>
+
 <footer class="text-muted">
-  <div class="container">
-    <p class="float-right">
-      <a href="#">Back to top</a>
-    </p>
-      <p>강남대학교 2019년 2학기 졸업작품</p>
-      <p>201201295 전영훈</p>
-      <p><a href="https://github.com/jeonyh0924/NBAproject">NBA project git repository</a></p>
-  </div>
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>강남대학교 2019년 2학기 졸업작품</p>
+        <p>201201295 전영훈</p>
+        <p><a href="https://github.com/jeonyh0924/NBAproject">NBA project git repository</a></p>
+    </div>
 </footer>
 </body>
 </html>

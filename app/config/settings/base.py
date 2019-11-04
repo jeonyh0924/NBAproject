@@ -69,7 +69,7 @@ INSTALLED_APPS = [
 
     'shop',
     'cart',
-
+    'challengepost.apps.ChallengepostConfig',
     'users.apps.UsersConfig',
     'posts.apps.PostsConfig',
     'members.apps.MembersConfig',
