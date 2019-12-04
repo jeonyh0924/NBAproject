@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
 
@@ -12,4 +13,9 @@ urlpatterns = [
     path('explore/tags/<str:tag_name>/', views.tag_post_list, name='tag-post-list'),
     path('tag-search/', views.tag_search, name='tag-search'),
     path('<int:post_pk>/like-toggle/', views.post_like_toggle, name='post-like-toggle'),
+    path('posts_api/', views.posts_list_api),
+    path('posts_detail_api/<int:pk>/', views.posts_detail_api),
+    path('api_postlist', views.api_PostList.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

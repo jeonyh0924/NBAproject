@@ -20,7 +20,6 @@ from django.conf import settings
 from django.views.generic import RedirectView
 
 from . import views
-from posts.views import tag_post_list
 
 urlpatterns = [
     path('admin/', admin.site.urls),

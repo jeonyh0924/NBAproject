@@ -31,6 +31,7 @@ app.conf.update(
             'task': 'news.tasks.headlines_crawling',
             # 10분 간격 실행
             'schedule': crontab(minute='*/10'),
+            # 'schedule': crontab(minute='*/10'),
             # 매일 자정 실행
             # 'schedule': crontab(minute=0, hour=0),
             'args': (),
