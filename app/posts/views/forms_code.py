@@ -1,19 +1,10 @@
 import re
 
-from django.views.decorators.csrf import csrf_exempt
-
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.parsers import JSONParser
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from .models import Post, Comment, HashTags
-from .forms import PostCreateForm, CommentForm, PostForm
-from .serializers import PostSerializer
+from posts.forms import CommentForm, PostForm
+from ..models import Post, Comment, HashTags
 
 
 # Create your views here.
@@ -145,44 +136,3 @@ def post_like_toggle(request, post_pk):
         # url = reverse('posts:post-list')
         # return redirect(url + f'#post-{post_pk}')
         return redirect('posts:post-detail', post_pk)
-
-
-def posts_list_api(request):
-    if request.method == 'GET':
-        post = Post.objects.all()
-        serializer = PostSerializer(post, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-
-@csrf_exempt
-def posts_detail_api(request, pk):
-    try:
-        post = Post.objects.get(pk=pk)
-    except Post.DoseNotExist:
-        return HttpResponse(status=404)
-
-    if request.method == 'GET':
-        serializer = PostSerializer(post)
-        return JsonResponse(serializer.data)
-
-    if request.method == 'PUT':
-        data = JSONParser.parse(request)
-        serializer = PostSerializer(post, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-    return JsonResponse(serializer.erros, status=400)
-
-
-class api_PostList(APIView):
-    def get(self, request, format=None):
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
