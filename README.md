@@ -22,7 +22,7 @@ json
 
 ```
 
-#### 6월 중순에 학기가 끝나고 readme에 정리한 내용들을 깃 블로그에 정리해서 올릴 것 입니다. 
+#### 12월 중순에 학기가 끝나고 readme에 정리한 내용들을 깃 블로그에 정리해서 올릴 것 입니다. 
 
 [정규표현식](https://highcode.tistory.com/6)
 
@@ -842,3 +842,17 @@ for player in player_list:
 
 
 ```
+#  DRF
+[번역 문서](http://raccoonyy.github.io/drf3-tutorial-2/)
+[원본 문서](https://www.django-rest-framework.org/topics/documenting-your-api/)
+
+## Refactor > Convert to python package REST API 작성 과정 
+프로젝트를 진행하면서 이후에 협업에서 쓰게 될 api를 연습하던 중, urls와 view에서 forms와 apis 두 형식이 존재하면서 함수 명이나 클래스 명이 중복되는 경우가 발생하여 파이썬 파일을 패캐지로 나누어 forms 로직과 apis 로직을 분리하는 필요성을 느낌.
+
+처리 과정은 파일 이름을 같게 만들어 처리 하였으므로 views와 forms의 구분을 따로 하진 않고 적겠습니다.
+
+file.py > refactor > convert to python package 
+
+urls > init 에서 include 를 통해서 urls, forms 구분 
+views 에서는 해당하는 형식으로 파일 구분 
+
