@@ -1,8 +1,9 @@
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
-from . import views
+from ..views import forms_code as views
 
-app_name = 'posts'
+# app_name = 'posts'
 
 urlpatterns = [
     path('', views.post_list, name='post-list'),
@@ -13,3 +14,5 @@ urlpatterns = [
     path('tag-search/', views.tag_search, name='tag-search'),
     path('<int:post_pk>/like-toggle/', views.post_like_toggle, name='post-like-toggle'),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

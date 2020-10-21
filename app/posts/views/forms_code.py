@@ -2,10 +2,9 @@ import re
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
 
-from .models import Post, Comment, HashTags
-from .forms import PostCreateForm, CommentForm, PostForm
+from posts.forms import CommentForm, PostForm
+from ..models import Post, Comment, HashTags
 
 
 # Create your views here.
