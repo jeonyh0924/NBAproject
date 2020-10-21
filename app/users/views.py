@@ -37,6 +37,7 @@ def login_view(request):
 
         form = LoginForm(request.POST)
         if form.is_valid():
+            request.session['user'] = form.user_id
             login(request, form.user)
             # get 파라미터에 'next'가 전달되면
             # 해당 키의 값으로 Redirect
