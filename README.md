@@ -2,5 +2,7 @@
 
 > 2019 강남대학교 컴퓨터공학과 졸업작품 - 전영훈
 
-## NBA youtube link : https://youtu.be/V1ErCFKFcnk, https://youtu.be/JHdRnh5DNMw
+## NBA youtube link 
+> https://youtu.be/V1ErCFKFcnk
+> https://youtu.be/JHdRnh5DNMw
 
